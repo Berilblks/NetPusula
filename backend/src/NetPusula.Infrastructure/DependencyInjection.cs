@@ -1,0 +1,21 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace NetPusula.Infrastructure;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext<NetPusulaDbContext>(options =>
+        {
+            var connection = configuration.GetConnectionString("Database");
+            if (string.IsNullOrWhiteSpace(connection))
+                throw new InvalidOperationException("Configure ConnectionStrings:Database before accessing the database.");
+            options.UseNpgsql(connection);
+        });
+        return services;
+    }
+}
+

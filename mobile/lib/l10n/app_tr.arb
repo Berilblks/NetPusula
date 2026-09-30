@@ -1,0 +1,48 @@
+{
+  "@@locale": "tr",
+  "welcomeTagline": "Hedefine giden yolu netlerinle keşfet.",
+  "loginAction": "Giriş Yap",
+  "registerAction": "Hesap Oluştur",
+  "logoutAction": "Çıkış Yap",
+  "loginTitle": "Tekrar hoş geldin",
+  "loginSubtitle": "Hedefine kaldığın yerden devam et.",
+  "registerTitle": "İlk adımı at",
+  "registerSubtitle": "Hesabını oluştur, yolculuğuna başla.",
+  "emailLabel": "E-posta",
+  "passwordLabel": "Şifre",
+  "nameLabel": "Ad / Görünen Ad",
+  "passwordConfirmation": "Şifre Tekrar",
+  "showPassword": "Şifreyi göster",
+  "hidePassword": "Şifreyi gizle",
+  "noAccount": "Hesabın yok mu? Hesap Oluştur",
+  "haveAccount": "Zaten hesabın var mı? Giriş Yap",
+  "requiredField": "Bu alanı doldur.",
+  "emailInvalid": "Geçerli bir e-posta adresi gir.",
+  "nameInvalid": "Adın 2–120 karakter olmalı.",
+  "passwordPolicy": "Şifren 8–128 karakter olmalı; en az bir harf ve bir rakam içermeli.",
+  "passwordHint": "En az 8 karakter, bir harf ve bir rakam.",
+  "passwordMismatch": "Şifreler eşleşmiyor.",
+  "invalidCredentials": "E-posta veya şifre hatalı.",
+  "validationError": "Bilgilerini kontrol edip tekrar dene.",
+  "duplicateEmail": "Bu e-posta adresiyle zaten bir hesap var. Giriş yapabilirsin.",
+  "rateLimited": "Çok fazla deneme yaptın. Lütfen biraz bekleyip tekrar dene.",
+  "networkError": "Sunucuya ulaşılamadı. İnternet bağlantını kontrol edip tekrar dene.",
+  "unexpectedError": "Bir hata oluştu. Lütfen tekrar dene.",
+  "sessionExpired": "Oturumun sona erdi. Lütfen yeniden giriş yap.",
+  "storageError": "Güvenli oturum bilgilerine erişilemedi. Cihazının kilidini açıp tekrar dene.",
+  "configurationError": "Uygulama şu anda bağlantı kuramıyor. Lütfen daha sonra tekrar dene.",
+  "localLogout": "Bu cihazdan çıkış yaptın. Sunucuya ulaşılamadığı için oturum sunucuda açık kalmış olabilir.",
+  "pleaseWait": "Lütfen bekle",
+  "startupMessage": "Senin için hazırlanıyoruz…",
+  "retryAction": "Tekrar Dene",
+  "localSignOutAction": "Bu cihazdan çıkış yap",
+  "homeGreeting": "Merhaba, {displayName}",
+  "@homeGreeting": {
+    "placeholders": {
+      "displayName": {
+        "type": "String"
+      }
+    }
+  },
+  "homeWelcome": "NetPusula’ya hoş geldin."
+}
