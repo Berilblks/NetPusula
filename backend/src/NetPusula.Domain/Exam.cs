@@ -15,6 +15,8 @@ public sealed class Exam : Entity
     public string Name { get; private set; } = null!;
     public string? Description { get; private set; }
     public bool IsActive { get; private set; } = true;
+    // Catalogue maintainers must explicitly verify completeness; section presence alone is insufficient.
+    public bool HasCompleteSectionConfiguration { get; private set; }
     public int SortOrder { get; private set; }
     public void Deactivate() => IsActive = false;
 }

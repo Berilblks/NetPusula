@@ -123,4 +123,117 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get homeWelcome => 'NetPusula’ya hoş geldin.';
+
+  @override
+  String get prepWelcome => 'Şimdi hedefini birlikte belirleyelim.';
+
+  @override
+  String get prepWelcomeBody => 'Önce hazırlandığın sınavı seç. Hedefini ve sınav tarihini birlikte belirleyelim.';
+
+  @override
+  String get prepExamTitle => 'Hangi sınava hazırlanıyorsun?';
+
+  @override
+  String get prepTargetTitle => 'Hedef netin kaç?';
+
+  @override
+  String get prepTargetHint => 'Hedefini daha sonra değiştirebilirsin.';
+
+  @override
+  String get prepDateTitle => 'Sınav tarihin ne zaman?';
+
+  @override
+  String get prepDateHint => 'Bu tarihi daha sonra değiştirebilirsin.';
+
+  @override
+  String get prepReviewTitle => 'Hedefin hazır mı?';
+
+  @override
+  String get continueAction => 'Devam Et';
+
+  @override
+  String get backAction => 'Geri';
+
+  @override
+  String get createGoalAction => 'Hedefimi Oluştur';
+
+  @override
+  String get editGoalAction => 'Hedefi Düzenle';
+
+  @override
+  String get saveGoalAction => 'Değişiklikleri Kaydet';
+
+  @override
+  String get chooseDateAction => 'Tarih Seç';
+
+  @override
+  String get targetNetLabel => 'Hedef net';
+
+  @override
+  String get examLabel => 'Sınav';
+
+  @override
+  String get examDateLabel => 'Sınav tarihi';
+
+  @override
+  String get targetLabel => 'Hedefin';
+
+  @override
+  String get prepLoading => 'Hedefin hazırlanıyor…';
+
+  @override
+  String get examListEmpty => 'Şu anda seçilebilecek bir sınav bulunmuyor. Daha sonra tekrar dene.';
+
+  @override
+  String get prepSaveError => 'Bilgiler kaydedilemedi. Lütfen tekrar dene.';
+
+  @override
+  String get prepLoadError => 'Hedef bilgilerine ulaşılamadı. Lütfen tekrar dene.';
+
+  @override
+  String get prepNetwork => 'Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.';
+
+  @override
+  String get prepMissing => 'Sınav veya hazırlık artık kullanılamıyor. Bilgilerini yeniden kontrol et.';
+
+  @override
+  String get prepConflict => 'Hazırlık bilgilerin değişmiş olabilir. Lütfen yeniden kontrol et.';
+
+  @override
+  String get prepValidation => 'Bilgilerini kontrol edip tekrar dene.';
+
+  @override
+  String get prepTargetInvalid => 'Sıfırdan büyük, en fazla 8 tam ve 4 ondalık basamaklı bir net gir.';
+
+  @override
+  String get prepDateInvalid => 'Bugün veya gelecekte bir tarih seç. Sunucu Türkiye takvimini kullanır.';
+
+  @override
+  String prepMaximum(String maximum) {
+    return 'Bu yapılandırmada en fazla $maximum net.';
+  }
+
+  @override
+  String prepStep(int step) {
+    return 'Adım $step / 5';
+  }
+
+  @override
+  String netValue(String net) {
+    return '$net net';
+  }
+
+  @override
+  String daysRemaining(int days) {
+    return '$days gün kaldı';
+  }
+
+  @override
+  String get examToday => 'Bugün';
+
+  @override
+  String get examPassed => 'Sınav tarihi geçti';
+
+  @override
+  String get mockTrackingSoon => 'Deneme takibi yakında burada olacak.';
 }

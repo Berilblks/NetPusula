@@ -19,5 +19,12 @@ public sealed class UserExam : Entity
     public DateOnly ExamDate { get; private set; }
     public bool IsActive { get; private set; } = true;
     public void Deactivate() => IsActive = false;
+    public void UpdateGoal(decimal targetNet, DateOnly examDate)
+    {
+        if (!IsActive) throw new InvalidOperationException("Historical preparations cannot be edited.");
+        if (targetNet <= 0) throw new ArgumentOutOfRangeException(nameof(targetNet));
+        TargetNet = Guard.Score(targetNet);
+        ExamDate = examDate;
+    }
 }
 

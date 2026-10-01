@@ -1,6 +1,6 @@
 # NetPusula
 
-Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1 temeline Faz 2 domain/veritabanı modeli ve salt okunur sınav kataloğu eklendi. Faz 3 backend authentication (register/login/refresh/logout/me) hazırdır. Flutter tek Türkçe karşılama ekranında kalır; deneme yazma uç noktaları ve mobil auth henüz yoktur.
+Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1–5 kapsamında domain/veritabanı, backend ve Flutter authentication, kullanıcıya ait tek aktif hazırlık ve ilk kullanım onboarding akışı hazırdır. Deneme CRUD, gerçek dashboard, istatistik ve alt gezinme henüz kapsamda değildir.
 
 ## Teknolojiler ve gereksinimler
 
@@ -204,3 +204,20 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:5080 --dart-define=ALLOW_
 ```
 
 Backend `AllowedHosts` listesi 10.0.2.2 içermelidir; tam başlangıç komutu bağlantılı belgede yer alır. API_BASE_URL zorunlu bağlantı yapılandırmasıdır; üretimde gerçek HTTPS origin verilmelidir. HTTP yalnızca açıkça izin verilen debug geliştirmesinde çalışır. Backend key/token secret'ları Flutter'a konulmaz. Bu fazda backend davranışı değiştirilmedi; sınav onboarding ve dashboard eklenmedi.
+
+## Faz 5: kullanıcı hazırlığı ve onboarding
+
+Auth sonrası `/api/user-exams/active` kontrol edilir. Aktif hazırlığı olmayan kullanıcı sınav → hedef net → tarih → özet adımlarını tamamlar. Hazırlığı olan kullanıcı geçici home'a gider; hedefini ve tarihini düzenleyebilir. Yükleme/ağ hatası “hazırlık yok” sayılmaz; retry ekranı gösterilir.
+
+Yeni authenticated uç noktalar: `GET /api/user-exams/active` (yoksa 204), `POST /api/user-exams`, `PUT /api/user-exams/{id}`. UserId JWT'den alınır; request'e eklenmesi reddedilir. Değiştirilecek sınav yeni hazırlık olarak oluşturulur; eski kayıtlar korunur. Tam kataloglar için `maximumTargetNet`, mevcut sınav DTO'larına opsiyonel alan olarak eklendi.
+
+Yeni migration: `20260930173315_EnforceSingleActiveUserExam`. API ve mobil sürümü kullanmadan önce backend dizininde:
+
+```powershell
+dotnet tool restore
+dotnet ef database update --project src/NetPusula.Infrastructure
+```
+
+Veritabanı bağlantısını önceki kurulum adımlarındaki ortam değişkeninden sağlayın. Migration önce bir kullanıcıya ait eski mükerrer aktif kayıtlar varsa en yenisini aktif bırakır, diğerlerini tarihçeyi silmeden pasifleştirir; sonra unique partial index'i oluşturur. Yeni `HasCompleteSectionConfiguration` alanı yalnızca mevcut doğrulanmış ALES seed'inde true'dur; soru/bölüm sayıları değiştirilmedi.
+
+Yaşam döngüsü, API örnekleri, decimal/tarih kuralları, offline davranışı ve manuel kontrol listesi: [hazırlık ve onboarding](docs/preparation-onboarding.md). Sonuçlar: [Faz 5 doğrulama](docs/phase5-validation.md).

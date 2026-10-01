@@ -320,6 +320,216 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'NetPusula’ya hoş geldin.'**
   String get homeWelcome;
+
+  /// No description provided for @prepWelcome.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi hedefini birlikte belirleyelim.'**
+  String get prepWelcome;
+
+  /// No description provided for @prepWelcomeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce hazırlandığın sınavı seç. Hedefini ve sınav tarihini birlikte belirleyelim.'**
+  String get prepWelcomeBody;
+
+  /// No description provided for @prepExamTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hangi sınava hazırlanıyorsun?'**
+  String get prepExamTitle;
+
+  /// No description provided for @prepTargetTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef netin kaç?'**
+  String get prepTargetTitle;
+
+  /// No description provided for @prepTargetHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefini daha sonra değiştirebilirsin.'**
+  String get prepTargetHint;
+
+  /// No description provided for @prepDateTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav tarihin ne zaman?'**
+  String get prepDateTitle;
+
+  /// No description provided for @prepDateHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu tarihi daha sonra değiştirebilirsin.'**
+  String get prepDateHint;
+
+  /// No description provided for @prepReviewTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefin hazır mı?'**
+  String get prepReviewTitle;
+
+  /// No description provided for @continueAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam Et'**
+  String get continueAction;
+
+  /// No description provided for @backAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri'**
+  String get backAction;
+
+  /// No description provided for @createGoalAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefimi Oluştur'**
+  String get createGoalAction;
+
+  /// No description provided for @editGoalAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefi Düzenle'**
+  String get editGoalAction;
+
+  /// No description provided for @saveGoalAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklikleri Kaydet'**
+  String get saveGoalAction;
+
+  /// No description provided for @chooseDateAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tarih Seç'**
+  String get chooseDateAction;
+
+  /// No description provided for @targetNetLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef net'**
+  String get targetNetLabel;
+
+  /// No description provided for @examLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav'**
+  String get examLabel;
+
+  /// No description provided for @examDateLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav tarihi'**
+  String get examDateLabel;
+
+  /// No description provided for @targetLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefin'**
+  String get targetLabel;
+
+  /// No description provided for @prepLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefin hazırlanıyor…'**
+  String get prepLoading;
+
+  /// No description provided for @examListEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu anda seçilebilecek bir sınav bulunmuyor. Daha sonra tekrar dene.'**
+  String get examListEmpty;
+
+  /// No description provided for @prepSaveError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilgiler kaydedilemedi. Lütfen tekrar dene.'**
+  String get prepSaveError;
+
+  /// No description provided for @prepLoadError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef bilgilerine ulaşılamadı. Lütfen tekrar dene.'**
+  String get prepLoadError;
+
+  /// No description provided for @prepNetwork.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.'**
+  String get prepNetwork;
+
+  /// No description provided for @prepMissing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav veya hazırlık artık kullanılamıyor. Bilgilerini yeniden kontrol et.'**
+  String get prepMissing;
+
+  /// No description provided for @prepConflict.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hazırlık bilgilerin değişmiş olabilir. Lütfen yeniden kontrol et.'**
+  String get prepConflict;
+
+  /// No description provided for @prepValidation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilgilerini kontrol edip tekrar dene.'**
+  String get prepValidation;
+
+  /// No description provided for @prepTargetInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıfırdan büyük, en fazla 8 tam ve 4 ondalık basamaklı bir net gir.'**
+  String get prepTargetInvalid;
+
+  /// No description provided for @prepDateInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün veya gelecekte bir tarih seç. Sunucu Türkiye takvimini kullanır.'**
+  String get prepDateInvalid;
+
+  /// No description provided for @prepMaximum.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yapılandırmada en fazla {maximum} net.'**
+  String prepMaximum(String maximum);
+
+  /// No description provided for @prepStep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adım {step} / 5'**
+  String prepStep(int step);
+
+  /// No description provided for @netValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'{net} net'**
+  String netValue(String net);
+
+  /// No description provided for @daysRemaining.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün kaldı'**
+  String daysRemaining(int days);
+
+  /// No description provided for @examToday.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün'**
+  String get examToday;
+
+  /// No description provided for @examPassed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav tarihi geçti'**
+  String get examPassed;
+
+  /// No description provided for @mockTrackingSoon.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme takibi yakında burada olacak.'**
+  String get mockTrackingSoon;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

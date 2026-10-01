@@ -55,6 +55,8 @@ internal static class DomainModelConfiguration
         preparation.Property(x => x.ExamDate).HasColumnType("date");
         preparation.HasAlternateKey(x => new { x.Id, x.ExamId });
         preparation.HasIndex(x => new { x.UserId, x.IsActive });
+        preparation.HasIndex(x => x.UserId).IsUnique().HasFilter("\"IsActive\" = TRUE")
+            .HasDatabaseName("UX_UserExams_OneActivePerUser");
         preparation.HasOne<User>().WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
         preparation.HasOne<Exam>().WithMany().HasForeignKey(x => x.ExamId).OnDelete(DeleteBehavior.Restrict);
         preparation.ToTable(t => t.HasCheckConstraint("CK_UserExams_TargetNet", "\"TargetNet\" >= 0"));

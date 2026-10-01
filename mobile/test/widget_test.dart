@@ -132,7 +132,7 @@ void main() {
     h.storage.value = session();
     await mount(tester, h);
     expect(find.text('Merhaba, Deniz'), findsOneWidget);
-    expect(h.protectedCalls, 1);
+    expect(h.protectedCalls, 2);
   });
   testWidgets('Splash protects content while secure storage is pending', (
     tester,

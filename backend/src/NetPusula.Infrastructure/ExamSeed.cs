@@ -28,6 +28,7 @@ internal static class ExamSeed
                 Code = code,
                 Name = name,
                 IsActive = true,
+                HasCompleteSectionConfiguration = code == "ALES",
                 SortOrder = number * 10,
                 CreatedAtUtc = Created
             });

@@ -44,5 +44,68 @@
       }
     }
   },
-  "homeWelcome": "NetPusula’ya hoş geldin."
+  "homeWelcome": "NetPusula’ya hoş geldin.",
+  "prepWelcome": "Şimdi hedefini birlikte belirleyelim.",
+  "prepWelcomeBody": "Önce hazırlandığın sınavı seç. Hedefini ve sınav tarihini birlikte belirleyelim.",
+  "prepExamTitle": "Hangi sınava hazırlanıyorsun?",
+  "prepTargetTitle": "Hedef netin kaç?",
+  "prepTargetHint": "Hedefini daha sonra değiştirebilirsin.",
+  "prepDateTitle": "Sınav tarihin ne zaman?",
+  "prepDateHint": "Bu tarihi daha sonra değiştirebilirsin.",
+  "prepReviewTitle": "Hedefin hazır mı?",
+  "continueAction": "Devam Et",
+  "backAction": "Geri",
+  "createGoalAction": "Hedefimi Oluştur",
+  "editGoalAction": "Hedefi Düzenle",
+  "saveGoalAction": "Değişiklikleri Kaydet",
+  "chooseDateAction": "Tarih Seç",
+  "targetNetLabel": "Hedef net",
+  "examLabel": "Sınav",
+  "examDateLabel": "Sınav tarihi",
+  "targetLabel": "Hedefin",
+  "prepLoading": "Hedefin hazırlanıyor…",
+  "examListEmpty": "Şu anda seçilebilecek bir sınav bulunmuyor. Daha sonra tekrar dene.",
+  "prepSaveError": "Bilgiler kaydedilemedi. Lütfen tekrar dene.",
+  "prepLoadError": "Hedef bilgilerine ulaşılamadı. Lütfen tekrar dene.",
+  "prepNetwork": "Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.",
+  "prepMissing": "Sınav veya hazırlık artık kullanılamıyor. Bilgilerini yeniden kontrol et.",
+  "prepConflict": "Hazırlık bilgilerin değişmiş olabilir. Lütfen yeniden kontrol et.",
+  "prepValidation": "Bilgilerini kontrol edip tekrar dene.",
+  "prepTargetInvalid": "Sıfırdan büyük, en fazla 8 tam ve 4 ondalık basamaklı bir net gir.",
+  "prepDateInvalid": "Bugün veya gelecekte bir tarih seç. Sunucu Türkiye takvimini kullanır.",
+  "prepMaximum": "Bu yapılandırmada en fazla {maximum} net.",
+  "@prepMaximum": {
+    "placeholders": {
+      "maximum": {
+        "type": "String"
+      }
+    }
+  },
+  "prepStep": "Adım {step} / 5",
+  "@prepStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "netValue": "{net} net",
+  "@netValue": {
+    "placeholders": {
+      "net": {
+        "type": "String"
+      }
+    }
+  },
+  "daysRemaining": "{days} gün kaldı",
+  "@daysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "examToday": "Bugün",
+  "examPassed": "Sınav tarihi geçti",
+  "mockTrackingSoon": "Deneme takibi yakında burada olacak."
 }

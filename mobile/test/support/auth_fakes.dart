@@ -92,7 +92,12 @@ class Harness {
     });
     client.httpClientAdapter = FakeAdapter((o) {
       protectedCalls++;
-      return protectedReply?.call(o) ?? jsonReply(testUser);
+      return protectedReply?.call(o) ??
+          jsonReply(
+            o.path == '/api/user-exams/active'
+                ? preparationPayload()
+                : testUser,
+          );
     });
     repository = AuthRepository(
       publicClient: public,
@@ -109,3 +114,21 @@ class Harness {
   late final AuthRepository repository;
   void dispose() => repository.dispose();
 }
+
+Map<String, dynamic> preparationPayload({
+  String id = 'prep-id',
+  num target = 80,
+  String date = '2027-01-01',
+}) => {
+  'id': id,
+  'exam': {
+    'id': 'exam-id',
+    'code': 'ALES',
+    'name': 'Test ALES',
+    'maximumTargetNet': 100,
+  },
+  'targetNet': target,
+  'examDate': date,
+  'createdAtUtc': '2026-09-30T00:00:00Z',
+  'updatedAtUtc': null,
+};

@@ -39,6 +39,9 @@ namespace NetPusula.Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
+                    b.Property<bool>("HasCompleteSectionConfiguration")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -68,6 +71,7 @@ namespace NetPusula.Infrastructure.Migrations
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
                             Code = "YKS",
                             CreatedAtUtc = new DateTime(2026, 9, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            HasCompleteSectionConfiguration = false,
                             IsActive = true,
                             Name = "Yükseköğretim Kurumları Sınavı",
                             SortOrder = 10
@@ -77,6 +81,7 @@ namespace NetPusula.Infrastructure.Migrations
                             Id = new Guid("00000000-0000-0000-0000-000000000002"),
                             Code = "KPSS",
                             CreatedAtUtc = new DateTime(2026, 9, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            HasCompleteSectionConfiguration = false,
                             IsActive = true,
                             Name = "Kamu Personel Seçme Sınavı",
                             SortOrder = 20
@@ -86,6 +91,7 @@ namespace NetPusula.Infrastructure.Migrations
                             Id = new Guid("00000000-0000-0000-0000-000000000003"),
                             Code = "ALES",
                             CreatedAtUtc = new DateTime(2026, 9, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            HasCompleteSectionConfiguration = true,
                             IsActive = true,
                             Name = "Akademik Personel ve Lisansüstü Eğitimi Giriş Sınavı",
                             SortOrder = 30
@@ -95,6 +101,7 @@ namespace NetPusula.Infrastructure.Migrations
                             Id = new Guid("00000000-0000-0000-0000-000000000004"),
                             Code = "DGS",
                             CreatedAtUtc = new DateTime(2026, 9, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            HasCompleteSectionConfiguration = false,
                             IsActive = true,
                             Name = "Dikey Geçiş Sınavı",
                             SortOrder = 40
@@ -104,6 +111,7 @@ namespace NetPusula.Infrastructure.Migrations
                             Id = new Guid("00000000-0000-0000-0000-000000000005"),
                             Code = "MSU",
                             CreatedAtUtc = new DateTime(2026, 9, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            HasCompleteSectionConfiguration = false,
                             IsActive = true,
                             Name = "Millî Savunma Üniversitesi Askerî Öğrenci Aday Belirleme Sınavı",
                             SortOrder = 50
@@ -113,6 +121,7 @@ namespace NetPusula.Infrastructure.Migrations
                             Id = new Guid("00000000-0000-0000-0000-000000000006"),
                             Code = "YDS",
                             CreatedAtUtc = new DateTime(2026, 9, 29, 0, 0, 0, 0, DateTimeKind.Utc),
+                            HasCompleteSectionConfiguration = false,
                             IsActive = true,
                             Name = "Yabancı Dil Bilgisi Seviye Tespit Sınavı",
                             SortOrder = 60
@@ -416,6 +425,11 @@ namespace NetPusula.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ExamId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("UX_UserExams_OneActivePerUser")
+                        .HasFilter("\"IsActive\" = TRUE");
 
                     b.HasIndex("UserId", "IsActive");
 

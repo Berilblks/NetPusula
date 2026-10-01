@@ -1,4 +1,4 @@
-# Mimari — Faz 2/3
+# Mimari — Faz 1–5
 
 ## Katmanlar ve kapsam
 Api → Application + Infrastructure; Infrastructure → Application → Domain. Domain bağımsızdır. Application okuma DTO'larını içerir; API sorguları EF ile doğrudan DTO projeksiyonu yapar. Generic repository/CQRS eklenmedi. Faz 1 sağlık, CORS, Swagger, hata işleme ve Flutter korunur. Auth Faz 3 ile eklenmiştir; deneme/katalog yazma API'leri yoktur.
@@ -25,7 +25,7 @@ erDiagram
 
 Kimlikler uygulamada Guid, PostgreSQL'de uuid; seed kimlikleri sabittir. Enum/sınav adına göre iş mantığı yoktur. TYT/AYT basit grup alanlarıyla temsil edilebilir. Yeni sınav/bölüm eklemek şema değişikliği gerektirmez.
 
-Aynı kullanıcı için aynı/farklı sınavlarda birden fazla hazırlık mümkündür. Tek aktif hazırlık zorunluluğu yoktur; eskisi pasifleştirilerek geçmiş korunur. Hedef netin üst sınırı tüm sınav gruplarının toplamına bağlanmaz; hangi gruplara hazırlanılacağı sonraki ürün kararıdır.
+Aynı kullanıcı için aynı/farklı sınavlarda birden fazla hazırlık mümkündür. Faz 5 ile kullanıcı başına en fazla bir aktif hazırlık, transaction ve unique partial index ile zorunludur; yeni hazırlık eskisini pasifleştirir, geçmiş silinmez. Hedef net üst sınırı yalnızca tam olarak işaretlenmiş, gruplandırılmamış ve tüm bölümleri aktif kataloglarda soru sayısından türetilir. Eksik katalogda üst sınır bilinmiyor kabul edilir. Detaylar: [hazırlık ve onboarding](preparation-onboarding.md).
 
 ## Net hesabı
 NetCalculator: correct - wrong / penaltyDivisor. decimal kullanılır; erken yuvarlama yoktur. .NET decimal 28–29 anlamlı basamak hassasiyetine sahiptir; 1/3 gibi bölmeler bu sınırdadır. Negatif net geçerlidir. Sunum yuvarlaması ileride ayrı uygulanabilir.

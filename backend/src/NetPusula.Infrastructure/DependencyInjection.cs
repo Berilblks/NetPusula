@@ -8,6 +8,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<NetPusula.Application.Preparations.IPreparationService, Preparations.PreparationService>();
         services.AddDbContext<NetPusulaDbContext>(options =>
         {
             var connection = configuration.GetConnectionString("Database");

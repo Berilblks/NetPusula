@@ -87,6 +87,9 @@ public sealed class DatabaseTests
         Assert.Equal(36.75m, loadedResult.Net);
         Assert.Null(db.Model.FindEntityType(typeof(MockExamResult))!.FindProperty("Net"));
         // A new preparation does not overwrite the old one or its results.
+        var previous = await db.UserExams.SingleAsync(x => x.Id == preparation.Id);
+        previous.Deactivate();
+        await db.SaveChangesAsync();
         db.UserExams.Add(new UserExam(user, other, 10, new DateOnly(2028, 1, 1)));
         await db.SaveChangesAsync();
         Assert.Equal(2, await db.UserExams.CountAsync());
