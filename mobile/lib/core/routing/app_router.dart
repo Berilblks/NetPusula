@@ -11,6 +11,8 @@ import '../../features/preparation/application/preparation_controller.dart';
 import '../../features/preparation/presentation/preparation_loading_screen.dart';
 import '../../features/preparation/presentation/goal_screen.dart';
 
+import '../../features/mock_exams/presentation/mock_exam_screens.dart';
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier(0);
   ref.listen(authControllerProvider, (_, __) => refresh.value++);
@@ -31,7 +33,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return path == '/onboarding' ? null : '/onboarding';
         }
         if (preparation.status == PreparationStatus.ready) {
-          return {'/home', '/goal/edit'}.contains(path) ? null : '/home';
+          return {'/home', '/goal/edit'}.contains(path) ||
+                  path == '/mock-exams' ||
+                  path.startsWith('/mock-exams/')
+              ? null
+              : '/home';
         }
         return path == '/preparation' ? null : '/preparation';
       }
@@ -45,6 +51,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/welcome', builder: (_, __) => const WelcomeScreen()),
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
+      GoRoute(
+        path: '/mock-exams',
+        builder: (_, __) => const MockHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/mock-exams/new',
+        builder: (_, __) => const MockFormScreen(),
+      ),
+      GoRoute(
+        path: '/mock-exams/:id/edit',
+        builder: (_, s) => MockFormScreen(id: s.pathParameters['id']),
+      ),
+      GoRoute(
+        path: '/mock-exams/:id',
+        builder: (_, s) => MockDetailScreen(s.pathParameters['id']!),
+      ),
       GoRoute(path: '/home', builder: (_, __) => const HomeScreen()),
       GoRoute(
         path: '/preparation',

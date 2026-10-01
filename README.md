@@ -1,6 +1,6 @@
 # NetPusula
 
-Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1–5 kapsamında domain/veritabanı, backend ve Flutter authentication, kullanıcıya ait tek aktif hazırlık ve ilk kullanım onboarding akışı hazırdır. Deneme CRUD, gerçek dashboard, istatistik ve alt gezinme henüz kapsamda değildir.
+Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1–6 kapsamında domain/veritabanı, authentication, tek aktif hazırlık/onboarding ve deneme ekleme, düzenleme, silme, bölüm sonuçları ve sayfalı geçmiş hazırdır. Gerçek dashboard, istatistik ve alt gezinme henüz kapsamda değildir.
 
 ## Teknolojiler ve gereksinimler
 
@@ -87,7 +87,7 @@ flutter gen-l10n
 flutter run -d <android-veya-ios-cihaz-kimliği>
 ```
 
-`flutter devices` ile cihazları görebilirsiniz. Uygulama şu aşamada API çağrısı yapmaz. Dio ve güvenli depolama paketleri istenen temel bağımlılıklar olarak eklenmiştir; henüz ağ/kimlik doğrulama işlevi yoktur.
+`flutter devices` ile cihazları görebilirsiniz. Uygulama Dio ile API'ye bağlanır; oturum güvenli depolamada saklanır. API bağlantı ayarları aşağıdaki Faz 4 bölümündedir.
 
 Uygulama adı lib/core/constants/app_brand.dart içinde, Türkçe metinler lib/l10n/app_tr.arb içindedir. Yerelleştirme Dart dosyaları Flutter'ın gerçek gen-l10n çıktısıdır. Android manifest ve iOS Info.plist içindeki mağaza/launcher adı da yeniden markalamada güncellenmelidir.
 
@@ -112,7 +112,7 @@ flutter build apk --debug
 
 Backend testleri sağlık yanıtını, Development/Production Swagger davranışını ve CORS köken sınırını; Flutter testleri ilk ekranı ve küçük ekranda büyük yazıyı doğrular. Faz 1 sonuçları docs/validation.md, Faz 2 sonuçları docs/phase2-validation.md içindedir. Yeni testler net hesabını, veritabanı kısıtlarını, tarihsel netleri ve katalog API davranışını da kapsar.
 
-Git commit oluşturulmadı. Öneri: `feat: add secure backend authentication`.
+Faz 1–5 GitHub üzerinde kayıtlıdır. Faz 6 değişiklikleri inceleme için commit edilmeden bırakılmıştır.
 
 
 Android temel hedefleri: minimum API 23, compile SDK 36, NDK 27.0.12077973. iOS minimum 12.0; iOS derlemesi Windows üzerinde doğrulanamaz.
@@ -221,3 +221,11 @@ dotnet ef database update --project src/NetPusula.Infrastructure
 Veritabanı bağlantısını önceki kurulum adımlarındaki ortam değişkeninden sağlayın. Migration önce bir kullanıcıya ait eski mükerrer aktif kayıtlar varsa en yenisini aktif bırakır, diğerlerini tarihçeyi silmeden pasifleştirir; sonra unique partial index'i oluşturur. Yeni `HasCompleteSectionConfiguration` alanı yalnızca mevcut doğrulanmış ALES seed'inde true'dur; soru/bölüm sayıları değiştirilmedi.
 
 Yaşam döngüsü, API örnekleri, decimal/tarih kuralları, offline davranışı ve manuel kontrol listesi: [hazırlık ve onboarding](docs/preparation-onboarding.md). Sonuçlar: [Faz 5 doğrulama](docs/phase5-validation.md).
+
+## Faz 6: deneme takibi
+
+Home → Deneme Ekle → bilgi/bölüm sonuçları/kontrol → sunucu net özeti; Deneme Geçmişi → detay/düzenle/onaylı silme tamamlandı. Beş JWT korumalı `/api/mock-exams` uç noktası eklendi. Net ve toplam yalnız backend decimal hesabından gelir; yeni skor DTO alanları hassasiyet için JSON metni olarak taşınır. Blank sunucuda türetilir; edit eski snapshot kurallarını korur.
+
+Yeni migration: `20261001114310_SnapshotMockSectionDisplay`. Backend çalıştırmadan önce mevcut kurulumdaki ortam değişkenleriyle `dotnet ef database update --project src/NetPusula.Infrastructure` uygulayın. Sayısal snapshot ve eski migration'lar değişmedi, yalnız tarihsel bölüm gösterim alanları eklendi.
+
+Sözleşme, pagination, tarih/snapshot/silme ve manuel kontroller: [Deneme takibi](docs/mock-exam-tracking.md). Komut sonuçları, testler ve dosya listesi: [Faz 6 doğrulama](docs/phase6-validation.md). Gerçek PostgreSQL doğrulaması Docker motoru erişilemediği için hâlâ bekliyor.

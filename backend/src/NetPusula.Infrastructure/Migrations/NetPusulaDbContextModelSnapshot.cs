@@ -274,6 +274,14 @@ namespace NetPusula.Infrastructure.Migrations
                     b.Property<Guid>("ExamSectionId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("GroupCodeSnapshot")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("GroupNameSnapshot")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<Guid>("MockExamId")
                         .HasColumnType("uuid");
 
@@ -282,6 +290,19 @@ namespace NetPusula.Infrastructure.Migrations
                         .HasColumnType("numeric(10,4)");
 
                     b.Property<int>("QuestionCountSnapshot")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SectionCodeSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("SectionNameSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("SortOrderSnapshot")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAtUtc")

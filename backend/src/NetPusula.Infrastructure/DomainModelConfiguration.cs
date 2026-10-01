@@ -72,6 +72,10 @@ internal static class DomainModelConfiguration
 
         var result = Base<MockExamResult>(model, "MockExamResults");
         result.Ignore(x => x.Net);
+        result.Property(x => x.SectionCodeSnapshot).HasMaxLength(64).IsRequired();
+        result.Property(x => x.SectionNameSnapshot).HasMaxLength(200).IsRequired();
+        result.Property(x => x.GroupCodeSnapshot).HasMaxLength(64);
+        result.Property(x => x.GroupNameSnapshot).HasMaxLength(200);
         result.Property(x => x.PenaltyDivisorSnapshot).HasPrecision(10, 4);
         result.HasIndex(x => new { x.MockExamId, x.ExamSectionId }).IsUnique();
         result.HasOne<MockExam>().WithMany().HasForeignKey(x => new { x.MockExamId, x.ExamId })

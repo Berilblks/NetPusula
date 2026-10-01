@@ -12,6 +12,11 @@ public sealed class MockExamResult : Entity
         MockExamId = mockExam.Id;
         ExamSectionId = section.Id;
         ExamId = section.ExamId;
+        SectionCodeSnapshot = section.Code;
+        SectionNameSnapshot = section.Name;
+        GroupCodeSnapshot = section.GroupCode;
+        GroupNameSnapshot = section.GroupName;
+        SortOrderSnapshot = section.SortOrder;
         QuestionCountSnapshot = section.QuestionCount;
         PenaltyDivisorSnapshot = section.PenaltyDivisor;
         SetAnswers(correct, wrong, blank);
@@ -23,6 +28,11 @@ public sealed class MockExamResult : Entity
     public int CorrectCount { get; private set; }
     public int WrongCount { get; private set; }
     public int BlankCount { get; private set; }
+    public string SectionCodeSnapshot { get; private set; } = null!;
+    public string SectionNameSnapshot { get; private set; } = null!;
+    public string? GroupCodeSnapshot { get; private set; }
+    public string? GroupNameSnapshot { get; private set; }
+    public int SortOrderSnapshot { get; private set; }
     public int QuestionCountSnapshot { get; private set; }
     public decimal PenaltyDivisorSnapshot { get; private set; }
     public decimal Net => NetCalculator.Calculate(CorrectCount, WrongCount, BlankCount, QuestionCountSnapshot, PenaltyDivisorSnapshot);

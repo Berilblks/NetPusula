@@ -236,4 +236,121 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mockTrackingSoon => 'Deneme takibi yakında burada olacak.';
+
+  @override
+  String get mockAdd => 'Deneme Ekle';
+
+  @override
+  String get mockHistory => 'Deneme Geçmişi';
+
+  @override
+  String get mockNew => 'Yeni Deneme';
+
+  @override
+  String get mockName => 'Deneme adı';
+
+  @override
+  String get mockNotes => 'Notlar (isteğe bağlı)';
+
+  @override
+  String get mockDate => 'Deneme tarihi';
+
+  @override
+  String get mockNext => 'Devam Et';
+
+  @override
+  String get mockBack => 'Geri';
+
+  @override
+  String get mockCorrect => 'Doğru';
+
+  @override
+  String get mockWrong => 'Yanlış';
+
+  @override
+  String get mockBlank => 'Boş';
+
+  @override
+  String get mockReview => 'Kontrol';
+
+  @override
+  String get mockSave => 'Denemeyi Kaydet';
+
+  @override
+  String get mockSaved => 'Deneme kaydedildi';
+
+  @override
+  String get mockTotal => 'Toplam Net';
+
+  @override
+  String get mockToHistory => 'Deneme Geçmişine Git';
+
+  @override
+  String get mockHome => 'Ana Sayfaya Dön';
+
+  @override
+  String get mockEmpty => 'Henüz deneme eklemedin.';
+
+  @override
+  String get mockFirst => 'İlk Denemeni Ekle';
+
+  @override
+  String get mockMore => 'Daha fazla yükle';
+
+  @override
+  String get mockRetry => 'Tekrar Dene';
+
+  @override
+  String get mockEdit => 'Düzenle';
+
+  @override
+  String get mockDelete => 'Sil';
+
+  @override
+  String get mockCancel => 'Vazgeç';
+
+  @override
+  String get mockDeleteTitle => 'Bu denemeyi silmek istediğine emin misin?';
+
+  @override
+  String get mockDeleteBody => 'Kaydedilen deneme ve bölüm sonuçları kalıcı olarak kaldırılacak.';
+
+  @override
+  String get mockMissing => 'Deneme bulunamadı.';
+
+  @override
+  String get mockNetwork => 'Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.';
+
+  @override
+  String get mockValidation => 'Adı, tarihi ve bölüm sayılarını kontrol et. Doğru ve yanlış toplamı soru sayısını aşamaz.';
+
+  @override
+  String get mockSession => 'Oturumun sona erdi. Lütfen yeniden giriş yap.';
+
+  @override
+  String get mockConflict => 'Sınav yapılandırması kullanılamıyor veya değişti. Yeniden yükleyip tekrar dene.';
+
+  @override
+  String get mockRateLimited => 'Çok fazla istek gönderdin. Biraz sonra tekrar dene.';
+
+  @override
+  String get mockFailure => 'İşlem tamamlanamadı. Lütfen tekrar dene.';
+
+  @override
+  String get mockNoPreparation => 'Devam etmek için aktif hazırlık oluşturmalısın.';
+
+  @override
+  String get mockPreparationAction => 'Hazırlığı Kontrol Et';
+
+  @override
+  String get mockNoSections => 'Bu sınav için henüz bölüm yapılandırılmamış. Daha sonra tekrar dene.';
+
+  @override
+  String get mockQuestions => 'soru';
+
+  @override
+  String get mockNet => 'net';
+
+  @override
+  String get mockSections => 'Bölüm sonuçları';
 }

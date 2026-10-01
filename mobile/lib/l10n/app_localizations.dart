@@ -530,6 +530,240 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Deneme takibi yakında burada olacak.'**
   String get mockTrackingSoon;
+
+  /// No description provided for @mockAdd.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme Ekle'**
+  String get mockAdd;
+
+  /// No description provided for @mockHistory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme Geçmişi'**
+  String get mockHistory;
+
+  /// No description provided for @mockNew.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeni Deneme'**
+  String get mockNew;
+
+  /// No description provided for @mockName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme adı'**
+  String get mockName;
+
+  /// No description provided for @mockNotes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Notlar (isteğe bağlı)'**
+  String get mockNotes;
+
+  /// No description provided for @mockDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme tarihi'**
+  String get mockDate;
+
+  /// No description provided for @mockNext.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam Et'**
+  String get mockNext;
+
+  /// No description provided for @mockBack.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri'**
+  String get mockBack;
+
+  /// No description provided for @mockCorrect.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru'**
+  String get mockCorrect;
+
+  /// No description provided for @mockWrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yanlış'**
+  String get mockWrong;
+
+  /// No description provided for @mockBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boş'**
+  String get mockBlank;
+
+  /// No description provided for @mockReview.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kontrol'**
+  String get mockReview;
+
+  /// No description provided for @mockSave.
+  ///
+  /// In tr, this message translates to:
+  /// **'Denemeyi Kaydet'**
+  String get mockSave;
+
+  /// No description provided for @mockSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme kaydedildi'**
+  String get mockSaved;
+
+  /// No description provided for @mockTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam Net'**
+  String get mockTotal;
+
+  /// No description provided for @mockToHistory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme Geçmişine Git'**
+  String get mockToHistory;
+
+  /// No description provided for @mockHome.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Sayfaya Dön'**
+  String get mockHome;
+
+  /// No description provided for @mockEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz deneme eklemedin.'**
+  String get mockEmpty;
+
+  /// No description provided for @mockFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk Denemeni Ekle'**
+  String get mockFirst;
+
+  /// No description provided for @mockMore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha fazla yükle'**
+  String get mockMore;
+
+  /// No description provided for @mockRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar Dene'**
+  String get mockRetry;
+
+  /// No description provided for @mockEdit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düzenle'**
+  String get mockEdit;
+
+  /// No description provided for @mockDelete.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sil'**
+  String get mockDelete;
+
+  /// No description provided for @mockCancel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vazgeç'**
+  String get mockCancel;
+
+  /// No description provided for @mockDeleteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu denemeyi silmek istediğine emin misin?'**
+  String get mockDeleteTitle;
+
+  /// No description provided for @mockDeleteBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilen deneme ve bölüm sonuçları kalıcı olarak kaldırılacak.'**
+  String get mockDeleteBody;
+
+  /// No description provided for @mockMissing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme bulunamadı.'**
+  String get mockMissing;
+
+  /// No description provided for @mockNetwork.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.'**
+  String get mockNetwork;
+
+  /// No description provided for @mockValidation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adı, tarihi ve bölüm sayılarını kontrol et. Doğru ve yanlış toplamı soru sayısını aşamaz.'**
+  String get mockValidation;
+
+  /// No description provided for @mockSession.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturumun sona erdi. Lütfen yeniden giriş yap.'**
+  String get mockSession;
+
+  /// No description provided for @mockConflict.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınav yapılandırması kullanılamıyor veya değişti. Yeniden yükleyip tekrar dene.'**
+  String get mockConflict;
+
+  /// No description provided for @mockRateLimited.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok fazla istek gönderdin. Biraz sonra tekrar dene.'**
+  String get mockRateLimited;
+
+  /// No description provided for @mockFailure.
+  ///
+  /// In tr, this message translates to:
+  /// **'İşlem tamamlanamadı. Lütfen tekrar dene.'**
+  String get mockFailure;
+
+  /// No description provided for @mockNoPreparation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam etmek için aktif hazırlık oluşturmalısın.'**
+  String get mockNoPreparation;
+
+  /// No description provided for @mockPreparationAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hazırlığı Kontrol Et'**
+  String get mockPreparationAction;
+
+  /// No description provided for @mockNoSections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sınav için henüz bölüm yapılandırılmamış. Daha sonra tekrar dene.'**
+  String get mockNoSections;
+
+  /// No description provided for @mockQuestions.
+  ///
+  /// In tr, this message translates to:
+  /// **'soru'**
+  String get mockQuestions;
+
+  /// No description provided for @mockNet.
+  ///
+  /// In tr, this message translates to:
+  /// **'net'**
+  String get mockNet;
+
+  /// No description provided for @mockSections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölüm sonuçları'**
+  String get mockSections;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

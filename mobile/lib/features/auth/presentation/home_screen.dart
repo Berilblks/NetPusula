@@ -70,7 +70,14 @@ class HomeScreen extends ConsumerWidget {
                     DateFormat.yMMMMd('tr').format(preparation.date.pickerDate),
                   ),
                   const SizedBox(height: 20),
-                  Text(l10n.mockTrackingSoon, textAlign: TextAlign.center),
+                  FilledButton(
+                    onPressed: () => context.push('/mock-exams/new'),
+                    child: Text(l10n.mockAdd),
+                  ),
+                  TextButton(
+                    onPressed: () => context.push('/mock-exams'),
+                    child: Text(l10n.mockHistory),
+                  ),
                   TextButton(
                     onPressed: () => context.push('/goal/edit'),
                     child: Text(l10n.editGoalAction),

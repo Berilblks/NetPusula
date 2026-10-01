@@ -75,3 +75,12 @@ SQLite yalnızca izole ilişkisel test sağlayıcısıdır. FK/unique/CHECK davr
 
 ## Faz 3 kimlik doğrulama
 User artık yerleşik hasher ile üretilmiş parolayı saklar. RefreshToken ayrı tablo olarak User'a RESTRICT ile bağlanır; önceki domain ilişkileri değişmez. JWT/Bearer, DTO uç noktaları, oturum ailesi rotation/replay kilitlemesi ve hız sınırı için [authentication.md](authentication.md) belgesine bakın. Email biçimi auth katmanında doğrulanır; email sahiplik doğrulaması ve parola sıfırlama henüz yoktur. Flutter aynı kalmıştır.
+
+
+## Faz 6 — deneme aggregate işlemleri
+
+Application MockExams request/DTO/service sözleşmelerini; Infrastructure MockExamService sahiplik sorguları, snapshot hesabı ve transaction'ları; Api MockExamEndpoints HTTP durumlarını yönetir. Aktif hazırlık sunucudan çözülür, liste sayfalıdır. Detail/edit/delete sahiplik kontrolü eski hazırlıklara ait doğrudan erişimde de uygulanır. Deneme ve çocukları açık transaction ile silinir; tüm RESTRICT FK'lar korunur.
+
+Mevcut soru/bölen snapshot'larına bölüm adı/kodu, grup adı/kodu ve sıra snapshot'ları eklendi. Net/TotalNet persist edilmez; yeni API skorları decimal metni olarak gönderir. Tarih DateOnly API, mevcut UTC sütunda günün 00:00 kodlamasıdır. Flutter repository, history/detail/draft provider'ları ve mutation controller ile çalışır; net hesabı yapmaz. Başarılı mutasyon ilgili cache'leri yeniler, oturum/hazırlık değişimi eski veriyi geçersiz kılar.
+
+Ayrıntılı sözleşme ve kararlar: [mock-exam-tracking.md](mock-exam-tracking.md). Dashboard, grafik ve alt gezinme bu faza dahil değildir.

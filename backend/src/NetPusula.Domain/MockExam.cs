@@ -15,6 +15,14 @@ public sealed class MockExam : Entity
         Notes = notes is null ? null : Guard.Text(notes, 4000);
     }
 
+    public void Update(string name, DateTime takenAtUtc, string? notes)
+    {
+        if (takenAtUtc.Kind != DateTimeKind.Utc) throw new ArgumentException("Date must be UTC.");
+        Name = Guard.Text(name, 200);
+        TakenAtUtc = takenAtUtc;
+        Notes = string.IsNullOrWhiteSpace(notes) ? null : Guard.Text(notes, 4000);
+    }
+
     public Guid UserExamId { get; private set; }
     // Shared FK component enforces exam membership in the database.
     public Guid ExamId { get; private set; }
