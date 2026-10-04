@@ -85,12 +85,15 @@ class FakeAdapter implements HttpClientAdapter {
 }
 
 class Harness {
-  Harness({Reply? publicReply, Reply? protectedReply}) {
+  Harness({Reply? publicReply, Reply? protectedReply, Reply? dashboardReply}) {
     public.httpClientAdapter = FakeAdapter((o) {
       publicPaths.add(o.path);
       return publicReply?.call(o) ?? jsonReply(authPayload());
     });
     client.httpClientAdapter = FakeAdapter((o) {
+      if (o.path == '/api/dashboard') {
+        return dashboardReply?.call(o) ?? jsonReply(dashboardPayload());
+      }
       protectedCalls++;
       return protectedReply?.call(o) ??
           jsonReply(
@@ -131,4 +134,38 @@ Map<String, dynamic> preparationPayload({
   'examDate': date,
   'createdAtUtc': '2026-09-30T00:00:00Z',
   'updatedAtUtc': null,
+};
+
+Map<String, dynamic> dashboardPayload({
+  String target = '80',
+  String date = '2027-01-01',
+  int days = 93,
+  String dateStatus = 'future',
+}) => {
+  'preparation': {
+    'id': 'prep-id',
+    'examId': 'exam-id',
+    'examCode': 'ALES',
+    'examName': 'Test ALES',
+    'targetNet': target,
+    'examDate': date,
+    'daysRemaining': days,
+    'dateStatus': dateStatus,
+  },
+  'summary': {
+    'mockExamCount': 0,
+    'latestNet': null,
+    'averageNet': null,
+    'bestNet': null,
+    'targetDifference': null,
+  },
+  'recentMocks': [],
+  'trend': [],
+  'sections': [],
+  'improvement': {
+    'hasEnoughData': false,
+    'recentAverage': null,
+    'previousAverage': null,
+    'change': null,
+  },
 };

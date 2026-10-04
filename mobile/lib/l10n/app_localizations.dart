@@ -764,6 +764,102 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bölüm sonuçları'**
   String get mockSections;
+
+  /// No description provided for @dashboardLatest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Net'**
+  String get dashboardLatest;
+
+  /// No description provided for @dashboardAverage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortalama'**
+  String get dashboardAverage;
+
+  /// No description provided for @dashboardBest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En Yüksek'**
+  String get dashboardBest;
+
+  /// No description provided for @dashboardRemaining.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefe Kalan'**
+  String get dashboardRemaining;
+
+  /// No description provided for @dashboardReached.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefe ulaştın'**
+  String get dashboardReached;
+
+  /// No description provided for @dashboardAbove.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefin üzerinde'**
+  String get dashboardAbove;
+
+  /// No description provided for @dashboardTrend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Net Gelişimi'**
+  String get dashboardTrend;
+
+  /// No description provided for @dashboardSections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölüm Performansı'**
+  String get dashboardSections;
+
+  /// No description provided for @dashboardRecent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son Denemeler'**
+  String get dashboardRecent;
+
+  /// No description provided for @dashboardNoData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz veri yok'**
+  String get dashboardNoData;
+
+  /// No description provided for @dashboardInsufficient.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gelişim karşılaştırması için en az 6 deneme gerekli.'**
+  String get dashboardInsufficient;
+
+  /// No description provided for @dashboardChartHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Noktalar deneme sırasındadır; kesikli çizgi hedef neti gösterir.'**
+  String get dashboardChartHint;
+
+  /// No description provided for @dashboardRefresh.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yenile'**
+  String get dashboardRefresh;
+
+  /// No description provided for @dashboardRetired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçmiş bölüm'**
+  String get dashboardRetired;
+
+  /// No description provided for @dashboardCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme sayısı'**
+  String get dashboardCount;
+
+  /// No description provided for @dashboardChange.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 3 deneme ortalaman önceki 3 denemeye göre {change} net.'**
+  String dashboardChange(String change);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

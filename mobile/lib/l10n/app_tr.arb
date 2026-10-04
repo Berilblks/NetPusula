@@ -146,5 +146,28 @@
   "mockNoSections": "Bu sınav için henüz bölüm yapılandırılmamış. Daha sonra tekrar dene.",
   "mockQuestions": "soru",
   "mockNet": "net",
-  "mockSections": "Bölüm sonuçları"
+  "mockSections": "Bölüm sonuçları",
+  "dashboardLatest": "Son Net",
+  "dashboardAverage": "Ortalama",
+  "dashboardBest": "En Yüksek",
+  "dashboardRemaining": "Hedefe Kalan",
+  "dashboardReached": "Hedefe ulaştın",
+  "dashboardAbove": "Hedefin üzerinde",
+  "dashboardTrend": "Net Gelişimi",
+  "dashboardSections": "Bölüm Performansı",
+  "dashboardRecent": "Son Denemeler",
+  "dashboardNoData": "Henüz veri yok",
+  "dashboardInsufficient": "Gelişim karşılaştırması için en az 6 deneme gerekli.",
+  "dashboardChartHint": "Noktalar deneme sırasındadır; kesikli çizgi hedef neti gösterir.",
+  "dashboardRefresh": "Yenile",
+  "dashboardRetired": "Geçmiş bölüm",
+  "dashboardCount": "Deneme sayısı",
+  "dashboardChange": "Son 3 deneme ortalaman önceki 3 denemeye göre {change} net.",
+  "@dashboardChange": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      }
+    }
+  }
 }

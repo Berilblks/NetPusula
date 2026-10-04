@@ -1,6 +1,6 @@
 # NetPusula
 
-Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1–6 kapsamında domain/veritabanı, authentication, tek aktif hazırlık/onboarding ve deneme ekleme, düzenleme, silme, bölüm sonuçları ve sayfalı geçmiş hazırdır. Gerçek dashboard, istatistik ve alt gezinme henüz kapsamda değildir.
+Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1–7 kapsamında domain/veritabanı, authentication, tek aktif hazırlık/onboarding ve deneme ekleme, düzenleme, silme, bölüm sonuçları ve sayfalı geçmiş hazırdır. Aktif hazırlığa ait dashboard, istatistik ve net gelişim grafiği de hazırdır; alt gezinme henüz kapsamda değildir.
 
 ## Teknolojiler ve gereksinimler
 
@@ -229,3 +229,9 @@ Home → Deneme Ekle → bilgi/bölüm sonuçları/kontrol → sunucu net özeti
 Yeni migration: `20261001114310_SnapshotMockSectionDisplay`. Backend çalıştırmadan önce mevcut kurulumdaki ortam değişkenleriyle `dotnet ef database update --project src/NetPusula.Infrastructure` uygulayın. Sayısal snapshot ve eski migration'lar değişmedi, yalnız tarihsel bölüm gösterim alanları eklendi.
 
 Sözleşme, pagination, tarih/snapshot/silme ve manuel kontroller: [Deneme takibi](docs/mock-exam-tracking.md). Komut sonuçları, testler ve dosya listesi: [Faz 6 doğrulama](docs/phase6-validation.md). Gerçek PostgreSQL doğrulaması Docker motoru erişilemediği için hâlâ bekliyor.
+
+## Faz 7: performans dashboard'u
+
+`GET /api/dashboard` aktif hazırlığa ait son/ortalama/en iyi net, hedef farkı, son 20 denemelik trend, bölüm performansı ve son 3/önceki 3 karşılaştırmasını döndürür. Flutter ana sayfa bu API'yi gösterir; pull-to-refresh ve deneme mutasyonlarından sonra invalidation vardır. Yeni migration veya chart bağımlılığı yoktur. Decimal string sözleşmesi korunur.
+
+Kesin tanımlar, snapshot/katalog ilişkisi, sorgu ve grafik kararları: [Dashboard istatistikleri](docs/dashboard-statistics.md). Testler ve gerçek PostgreSQL sonuçları: [Faz 7 doğrulama](docs/phase7-validation.md). Faz 7 değişiklikleri commit/push yapılmadan incelemeye bırakılmıştır.

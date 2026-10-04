@@ -84,3 +84,10 @@ Application MockExams request/DTO/service sözleşmelerini; Infrastructure MockE
 Mevcut soru/bölen snapshot'larına bölüm adı/kodu, grup adı/kodu ve sıra snapshot'ları eklendi. Net/TotalNet persist edilmez; yeni API skorları decimal metni olarak gönderir. Tarih DateOnly API, mevcut UTC sütunda günün 00:00 kodlamasıdır. Flutter repository, history/detail/draft provider'ları ve mutation controller ile çalışır; net hesabı yapmaz. Başarılı mutasyon ilgili cache'leri yeniler, oturum/hazırlık değişimi eski veriyi geçersiz kılar.
 
 Ayrıntılı sözleşme ve kararlar: [mock-exam-tracking.md](mock-exam-tracking.md). Dashboard, grafik ve alt gezinme bu faza dahil değildir.
+
+
+## Faz 7 — dashboard
+
+Application Dashboard DTO/service sözleşmesi, Infrastructure DashboardService ve Api DashboardEndpoints eklenmiştir. Tek endpoint üç scalar sorgu ile aktif hazırlığın tutarlı görüntüsünü okur. Sonuçlar mevcut NetCalculator üzerinden streaming decimal aggregate'e girer; entity graph yüklemesi/N+1 yoktur. PostgreSQL RepeatableRead kullanılır. Yeni persist edilen istatistik veya migration yoktur.
+
+Flutter DashboardRepository + oturum/hazırlık bağımlı autoDispose FutureProvider kullanır. Mock create/edit/delete yalnız ilgili cache'leri invalidate eder. Home Material 3 kartları, özel düz çizgili grafik ve Semantics ile server verisini sunar. Double yalnız piksel geometrisindedir. Kesin istatistik ve performans kararları [dashboard-statistics.md](dashboard-statistics.md) içinde açıklanır.

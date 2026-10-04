@@ -1,0 +1,13 @@
+using System.Text.Json.Serialization;
+namespace NetPusula.Application.Dashboard;
+
+// All [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal properties in these output-only DTOs retain the Phase 6 string contract.
+public sealed record DashboardPreparation(Guid Id, Guid ExamId, string ExamCode, string ExamName, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal TargetNet, DateOnly ExamDate, int DaysRemaining, string DateStatus);
+public sealed record DashboardSummary(int MockExamCount, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? LatestNet, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? AverageNet, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? BestNet, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? TargetDifference);
+public sealed record DashboardPoint(Guid MockExamId, string Name, DateOnly TakenAt, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal TotalNet);
+public sealed record SectionPerformance(Guid ExamSectionId, string SectionCode, string SectionName, string? GroupCode, string? GroupName,
+    bool IsActive, int QuestionCount, int AttemptCount, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? LatestNet, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? AverageNet, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? BestNet);
+public sealed record Improvement(bool HasEnoughData, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? RecentAverage, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? PreviousAverage, [property: JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)] decimal? Change);
+public sealed record DashboardDto(DashboardPreparation Preparation, DashboardSummary Summary, List<DashboardPoint> RecentMocks,
+    List<DashboardPoint> Trend, List<SectionPerformance> Sections, Improvement Improvement);
+public interface IDashboardService { Task<DashboardDto?> GetAsync(Guid userId, CancellationToken ct); }

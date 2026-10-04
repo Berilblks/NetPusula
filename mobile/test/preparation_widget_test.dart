@@ -13,6 +13,22 @@ import 'widget_test.dart' show tapVisible;
 class PreparationHarness {
   PreparationHarness({this.hasActive = false}) {
     h = Harness(
+      dashboardReply:
+          (_) => jsonReply(
+            dashboardPayload(
+              target: target.toString(),
+              date: date,
+              days: DateTime.parse(
+                date,
+              ).difference(DateTime(2026, 9, 30)).inDays.clamp(0, 10000),
+              dateStatus:
+                  date.compareTo("2026-09-30") < 0
+                      ? "past"
+                      : date == "2026-09-30"
+                      ? "today"
+                      : "future",
+            ),
+          ),
       publicReply: (o) {
         if (o.path == '/api/exams') {
           catalogueCalls++;

@@ -353,4 +353,54 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mockSections => 'Bölüm sonuçları';
+
+  @override
+  String get dashboardLatest => 'Son Net';
+
+  @override
+  String get dashboardAverage => 'Ortalama';
+
+  @override
+  String get dashboardBest => 'En Yüksek';
+
+  @override
+  String get dashboardRemaining => 'Hedefe Kalan';
+
+  @override
+  String get dashboardReached => 'Hedefe ulaştın';
+
+  @override
+  String get dashboardAbove => 'Hedefin üzerinde';
+
+  @override
+  String get dashboardTrend => 'Net Gelişimi';
+
+  @override
+  String get dashboardSections => 'Bölüm Performansı';
+
+  @override
+  String get dashboardRecent => 'Son Denemeler';
+
+  @override
+  String get dashboardNoData => 'Henüz veri yok';
+
+  @override
+  String get dashboardInsufficient => 'Gelişim karşılaştırması için en az 6 deneme gerekli.';
+
+  @override
+  String get dashboardChartHint => 'Noktalar deneme sırasındadır; kesikli çizgi hedef neti gösterir.';
+
+  @override
+  String get dashboardRefresh => 'Yenile';
+
+  @override
+  String get dashboardRetired => 'Geçmiş bölüm';
+
+  @override
+  String get dashboardCount => 'Deneme sayısı';
+
+  @override
+  String dashboardChange(String change) {
+    return 'Son 3 deneme ortalaman önceki 3 denemeye göre $change net.';
+  }
 }

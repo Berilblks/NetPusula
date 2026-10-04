@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../dashboard/application/dashboard_provider.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../preparation/application/preparation_controller.dart';
 import '../../preparation/domain/preparation.dart';
@@ -130,6 +131,7 @@ class MockMutationController extends Notifier<MockMutationState> {
       final result = await ref.read(mockRepositoryProvider).save(draft);
       if (!ref.mounted || epoch != _epoch) return null;
       ref.invalidate(mockHistoryProvider);
+      ref.invalidate(dashboardProvider);
       ref.invalidate(mockDetailProvider(result.id));
       state = const MockMutationState();
       return result;
@@ -149,6 +151,7 @@ class MockMutationController extends Notifier<MockMutationState> {
       await ref.read(mockRepositoryProvider).delete(id);
       if (!ref.mounted || epoch != _epoch) return false;
       ref.invalidate(mockHistoryProvider);
+      ref.invalidate(dashboardProvider);
       ref.invalidate(mockDetailProvider(id));
       state = const MockMutationState();
       return true;
