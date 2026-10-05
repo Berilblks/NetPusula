@@ -1,3 +1,4 @@
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -69,7 +70,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             ? null
                             : l10n.nameInvalid,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpace.lg),
               TextFormField(
                 key: const Key('register.email'),
                 controller: email,
@@ -85,7 +86,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             ? null
                             : l10n.emailInvalid,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpace.lg),
               PasswordField(
                 key: const Key('register.password'),
                 controller: password,
@@ -123,14 +124,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               ),
               if (state.issue != null)
                 AuthNotice(authIssueText(l10n, state.issue!)),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpace.xl),
               AuthSubmit(
                 key: const Key('register.submit'),
                 label: l10n.registerAction,
                 busy: state.busy,
                 onPressed: submit,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpace.lg),
               TextButton(
                 onPressed:
                     state.busy

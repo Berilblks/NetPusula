@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,17 +142,20 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
       },
       child: AuthPage(
         title: widget.edit ? l.editGoalAction : titles[step],
-        subtitle: widget.edit ? selected?.code ?? '' : l.prepStep(step + 1),
+        subtitle: widget.edit ? selected?.code ?? '' : l.prepJourney,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (!widget.edit) ...[
-              LinearProgressIndicator(value: (step + 1) / 5),
-              const SizedBox(height: 24),
+              StepProgress(
+                label: l.prepStep(step + 1),
+                step: step + 1,
+                total: 5,
+              ),
             ],
             if (widget.edit) ...[
               targetField(l, state.saving),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpace.xl),
               dateField(l, state.saving),
             ] else ...[
               if (step == 0) ...[
@@ -159,7 +164,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
                   size: 64,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppSpace.xl),
                 Text(
                   l.prepWelcomeBody,
                   style: Theme.of(context).textTheme.bodyLarge,
@@ -183,7 +188,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
             if (localError != null) AuthNotice(localError!),
             if (state.issue != null)
               AuthNotice(preparationIssueText(l, state.issue!)),
-            const SizedBox(height: 28),
+            const SizedBox(height: AppSpace.xl),
             if (widget.edit || step == 4)
               AuthSubmit(
                 key: const Key('goal.save'),
@@ -194,7 +199,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
             else
               FilledButton(
                 key: const Key('goal.next'),
-                onPressed: canContinue ? next : null,
+                onPressed: canContinue && !state.saving ? next : null,
                 child: Text(l.continueAction),
               ),
             if (!widget.edit && step > 0)
@@ -203,7 +208,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
                 onPressed: state.saving ? null : back,
                 child: Text(l.backAction),
               ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpace.md),
             TextButton(
               onPressed:
                   state.saving
@@ -224,7 +229,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(l.prepTargetHint),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpace.lg),
         TextFormField(
           key: const Key('goal.target'),
           controller: target,
@@ -241,7 +246,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
           ],
           decoration: InputDecoration(
             labelText: l.targetNetLabel,
-            suffixText: 'net',
+            suffixText: l.mockNet,
           ),
           validator: validateTarget,
           onFieldSubmitted: (_) {
@@ -260,7 +265,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
       Text(l.prepDateHint),
-      const SizedBox(height: 16),
+      const SizedBox(height: AppSpace.lg),
       OutlinedButton.icon(
         key: const Key('goal.date'),
         onPressed: busy ? null : chooseDate,
@@ -279,7 +284,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 6),
+        const SizedBox(height: AppSpace.sm),
         Text(value, style: Theme.of(context).textTheme.titleLarge),
       ],
     ),
@@ -287,10 +292,7 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
   Widget examList(AppLocalizations l) {
     final catalogue = ref.watch(examCatalogueProvider);
     return catalogue.when(
-      loading:
-          () => Center(
-            child: CircularProgressIndicator(semanticsLabel: l.pleaseWait),
-          ),
+      loading: () => const AppLoading(),
       error:
           (error, __) => Column(
             children: [
@@ -322,6 +324,12 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
                         exams
                             .map(
                               (exam) => Card(
+                                color:
+                                    selected?.id == exam.id
+                                        ? Theme.of(
+                                          context,
+                                        ).colorScheme.primaryContainer
+                                        : null,
                                 child: RadioListTile<String>(
                                   key: Key('exam.${exam.id}'),
                                   value: exam.id,

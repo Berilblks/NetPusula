@@ -1,3 +1,4 @@
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -63,7 +64,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ? null
                             : l10n.emailInvalid,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpace.lg),
               PasswordField(
                 key: const Key('login.password'),
                 controller: password,
@@ -81,14 +82,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               if (state.issue != null)
                 AuthNotice(authIssueText(l10n, state.issue!)),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpace.xl),
               AuthSubmit(
                 key: const Key('login.submit'),
                 label: l10n.loginAction,
                 busy: state.busy,
                 onPressed: submit,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpace.lg),
               TextButton(
                 onPressed:
                     state.busy

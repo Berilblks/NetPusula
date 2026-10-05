@@ -98,3 +98,10 @@ Flutter DashboardRepository + oturum/hazırlık bağımlı autoDispose FuturePro
 Application Statistics DTO/service sözleşmesi, Infrastructure StatisticsService ve Api StatisticsEndpoints eklenmiştir. Mevcut veriden türetilir; şema/seed/migration değişmez. Aktif hazırlık + sayı + katalog + sınırlı deneme/sonuç akışı olmak üzere dört scalar SELECT tutarlı PostgreSQL RepeatableRead transaction'ında çalışır. Deneme sınırı join öncesindedir. NetCalculator ve dashboard ile paylaşılan DecimalAggregate tek decimal hesaplama kaynağıdır; ayrı Flutter/SQL formülü yoktur.
 
 İstatistikler ayrı `/statistics` rotasındadır. Range family FutureProvider eski filtre/oturum yanıtlarını ayırır. MockMutationController merkezi invalidation'ı genişletir. NetTrendChart opsiyonel hedefle tekrar kullanılır; erişilebilir cevap çubukları ve tarihsel cevap listesi eklenir. Detaylar [advanced-statistics.md](advanced-statistics.md), güncel gerçek PostgreSQL doğrulaması [phase8-validation.md](phase8-validation.md) içindedir. Önceki fazların Docker erişim kısıtı bu doğrulamada geçerli değildir.
+
+
+## Faz 9 — mobil sunum katmanı
+
+`core/theme/design_tokens.dart` ölçü/radius değerlerini, `AppTheme` semantic renk ve component stillerini, `core/widgets/app_components.dart` sunum bileşenlerini toplar. Feature ekranları provider/repository ve route kararlarını sahiplenmeye devam eder; ortak UI katmanı veri erişimi veya business formülü içermez. `NetPusulaApp` sistem açık/koyu temasını ve status-bar kontrastını uygular.
+
+Backend/API/model/migration, Flutter data/domain/provider/routing ve decimal formatter değişmez. Mevcut chart painter'ı yalnız hafif kılavuz ve single-point açıklamasıyla güncellenir. Tasarım kararları: [design-system.md](design-system.md); test/visual kanıt: [phase9-validation.md](phase9-validation.md).

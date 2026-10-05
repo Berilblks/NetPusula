@@ -37,7 +37,17 @@ Finder field(String key) =>
           matching: find.byType(TextFormField),
         );
 Future<void> tapVisible(WidgetTester tester, Finder finder) async {
-  await tester.ensureVisible(finder);
+  if (finder.evaluate().isEmpty) {
+    await tester.scrollUntilVisible(
+      finder,
+      180,
+      scrollable: find.byType(Scrollable).last,
+    );
+  } else {
+    await tester.ensureVisible(finder);
+  }
+  await tester.pump(); // Apply the scroll layout before hit-testing the action.
+  expect(finder.hitTestable(), findsOneWidget);
   await tester.tap(finder);
   await tester.pumpAndSettle();
 }
@@ -48,7 +58,7 @@ void main() {
   ) async {
     await mount(tester, Harness());
     expect(find.text('NetPusula'), findsOneWidget);
-    expect(find.text('Hedefine giden yolu netlerinle keşfet.'), findsOneWidget);
+    expect(find.text('Denemelerini takip et, gelişimini gör.'), findsOneWidget);
     expect(find.text('Giriş Yap'), findsOneWidget);
   });
   testWidgets('Welcome fits small screen and large text', (tester) async {

@@ -1,3 +1,4 @@
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/dashboard.dart';
@@ -33,7 +34,7 @@ class NetTrendChart extends StatelessWidget {
                   Text('${l.targetLabel}: ${target!.display}'),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpace.sm),
             SizedBox(
               height: 180,
               child: CustomPaint(
@@ -57,6 +58,11 @@ class NetTrendChart extends StatelessWidget {
                 if (points.length > 1) Text(points.last.date.iso),
               ],
             ),
+            if (points.length == 1)
+              Text(
+                l.chartSinglePoint,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             Text(
               target == null ? l.statisticsChartHint : l.dashboardChartHint,
               style: Theme.of(context).textTheme.bodySmall,
@@ -94,6 +100,15 @@ class NetTrendPainter extends CustomPainter {
           ..strokeWidth = 1;
     canvas.drawLine(rect.bottomLeft, rect.bottomRight, axis);
     canvas.drawLine(rect.topLeft, rect.bottomLeft, axis);
+    // Quiet reference guides; linear geometry and original values are unchanged.
+    for (final fraction in [.25, .5, .75]) {
+      final guideY = rect.top + fraction * rect.height;
+      canvas.drawLine(
+        Offset(rect.left, guideY),
+        Offset(rect.right, guideY),
+        axis,
+      );
+    }
     final reference =
         Paint()
           ..color = targetColor

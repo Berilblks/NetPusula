@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,23 +32,17 @@ class MockError extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context)!;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(issueText(l, issue), textAlign: TextAlign.center),
-        TextButton(
-          onPressed:
-              issue == MockIssue.noPreparation
-                  ? () =>
-                      ref.read(preparationControllerProvider.notifier).load()
-                  : retry,
-          child: Text(
-            issue == MockIssue.noPreparation
-                ? l.mockPreparationAction
-                : l.mockRetry,
-          ),
-        ),
-      ],
+    return AppMessage(
+      message: issueText(l, issue),
+      error: true,
+      actionLabel:
+          issue == MockIssue.noPreparation
+              ? l.mockPreparationAction
+              : l.mockRetry,
+      onAction:
+          issue == MockIssue.noPreparation
+              ? () => ref.read(preparationControllerProvider.notifier).load()
+              : retry,
     );
   }
 }
@@ -58,8 +54,9 @@ class MockHistoryScreen extends ConsumerWidget {
     final l = AppLocalizations.of(context)!,
         state = ref.watch(mockHistoryProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l.mockHistory),
+      appBar: pageAppBar(
+        context,
+        title: l.mockHistory,
         leading: BackButton(
           onPressed: () {
             if (context.canPop()) {
@@ -70,53 +67,51 @@ class MockHistoryScreen extends ConsumerWidget {
           },
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          FilledButton(
-            onPressed: () => context.push('/mock-exams/new'),
-            child: Text(l.mockAdd),
-          ),
-          if (state.loading && state.items.isEmpty)
-            const Center(child: CircularProgressIndicator()),
-          if (!state.loading && state.issue == null && state.items.isEmpty) ...[
-            Text(l.mockEmpty),
-            TextButton(
+      body: PageBody(
+        child: ListView(
+          padding: AppSpace.page,
+          children: [
+            FilledButton(
               onPressed: () => context.push('/mock-exams/new'),
-              child: Text(l.mockFirst),
+              child: Text(l.mockAdd),
             ),
-          ],
-          for (final exam in state.items)
-            Card(
-              child: ListTile(
+            if (state.loading && state.items.isEmpty) const AppLoading(),
+            if (!state.loading && state.issue == null && state.items.isEmpty)
+              AppMessage(
+                message: l.mockEmpty,
+                icon: Icons.assignment_outlined,
+                actionLabel: l.mockFirst,
+                onAction: () => context.push('/mock-exams/new'),
+              ),
+            for (final exam in state.items)
+              MockSummaryCard(
                 key: Key('mock.${exam.id}'),
-                title: Text(exam.name),
-                subtitle: Text(dateText(exam.date)),
-                trailing: Text('${displayNet(exam.totalNet)} ${l.mockNet}'),
+                name: exam.name,
+                date: dateText(exam.date),
+                net: '${displayNet(exam.totalNet)} ${l.mockNet}',
                 onTap: () => context.push('/mock-exams/${exam.id}'),
               ),
-            ),
-          if (state.issue != null)
-            MockError(
-              state.issue!,
-              retry:
-                  () => ref
-                      .read(mockHistoryProvider.notifier)
-                      .load(more: state.items.isNotEmpty),
-            ),
-          if (state.page > 0 && state.page < state.totalPages)
-            TextButton(
-              onPressed:
-                  state.loading
-                      ? null
-                      : () => ref
-                          .read(mockHistoryProvider.notifier)
-                          .load(more: true),
-              child: Text(l.mockMore),
-            ),
-          if (state.loading && state.items.isNotEmpty)
-            const Center(child: CircularProgressIndicator()),
-        ],
+            if (state.issue != null)
+              MockError(
+                state.issue!,
+                retry:
+                    () => ref
+                        .read(mockHistoryProvider.notifier)
+                        .load(more: state.items.isNotEmpty),
+              ),
+            if (state.page > 0 && state.page < state.totalPages)
+              TextButton(
+                onPressed:
+                    state.loading
+                        ? null
+                        : () => ref
+                            .read(mockHistoryProvider.notifier)
+                            .load(more: true),
+                child: Text(l.mockMore),
+              ),
+            if (state.loading && state.items.isNotEmpty) const AppLoading(),
+          ],
+        ),
       ),
     );
   }
@@ -134,7 +129,7 @@ class MockBreakdown extends StatelessWidget {
         Text(exam.name, style: Theme.of(context).textTheme.headlineSmall),
         Text(dateText(exam.date)),
         if (exam.notes?.isNotEmpty == true) Text(exam.notes!),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSpace.lg),
         Text(l.mockTotal),
         Text(
           '${displayNet(exam.totalNet)} ${l.mockNet}',
@@ -144,7 +139,7 @@ class MockBreakdown extends StatelessWidget {
         for (final result in exam.results)
           Card(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpace.lg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -176,8 +171,9 @@ class MockDetailScreen extends ConsumerWidget {
         detail = ref.watch(mockDetailProvider(id)),
         mutation = ref.watch(mockMutationProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l.mockHistory),
+      appBar: pageAppBar(
+        context,
+        title: l.mockHistory,
         leading: BackButton(
           onPressed: () {
             if (context.canPop()) {
@@ -188,67 +184,80 @@ class MockDetailScreen extends ConsumerWidget {
           },
         ),
       ),
-      body: detail.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error:
-            (e, _) => Center(
-              child: MockError(
-                mockIssue(e),
-                retry: () => ref.invalidate(mockDetailProvider(id)),
+      body: PageBody(
+        child: detail.when(
+          loading: () => const AppLoading(),
+          error:
+              (e, _) => Center(
+                child: MockError(
+                  mockIssue(e),
+                  retry: () => ref.invalidate(mockDetailProvider(id)),
+                ),
               ),
-            ),
-        data:
-            (exam) => ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                MockBreakdown(exam),
-                if (mutation.issue != null) Text(issueText(l, mutation.issue!)),
-                FilledButton(
-                  onPressed:
-                      mutation.busy
-                          ? null
-                          : () => context.push('/mock-exams/$id/edit'),
-                  child: Text(l.mockEdit),
-                ),
-                TextButton(
-                  key: const Key('mock.delete'),
-                  onPressed:
-                      mutation.busy
-                          ? null
-                          : () async {
-                            final confirmed = await showDialog<bool>(
-                              context: context,
-                              builder:
-                                  (dialog) => AlertDialog(
-                                    title: Text(l.mockDeleteTitle),
-                                    content: Text(l.mockDeleteBody),
-                                    actions: [
-                                      TextButton(
-                                        onPressed:
-                                            () => Navigator.pop(dialog, false),
-                                        child: Text(l.mockCancel),
-                                      ),
-                                      FilledButton(
-                                        key: const Key('mock.confirmDelete'),
-                                        onPressed:
-                                            () => Navigator.pop(dialog, true),
-                                        child: Text(l.mockDelete),
-                                      ),
-                                    ],
-                                  ),
-                            );
-                            if (confirmed != true || !context.mounted) return;
-                            final deleted = await ref
-                                .read(mockMutationProvider.notifier)
-                                .delete(id);
-                            if (deleted && context.mounted) {
-                              context.go('/mock-exams');
-                            }
-                          },
-                  child: Text(l.mockDelete),
-                ),
-              ],
-            ),
+          data:
+              (exam) => ListView(
+                padding: const EdgeInsets.all(AppSpace.lg),
+                children: [
+                  MockBreakdown(exam),
+                  if (mutation.issue != null)
+                    AppMessage(
+                      message: issueText(l, mutation.issue!),
+                      error: true,
+                    ),
+                  FilledButton(
+                    onPressed:
+                        mutation.busy
+                            ? null
+                            : () => context.push('/mock-exams/$id/edit'),
+                    child: Text(l.mockEdit),
+                  ),
+                  TextButton(
+                    key: const Key('mock.delete'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                    onPressed:
+                        mutation.busy
+                            ? null
+                            : () async {
+                              final confirmed = await showDialog<bool>(
+                                context: context,
+                                builder:
+                                    (dialog) => AlertDialog(
+                                      title: Text(l.mockDeleteTitle),
+                                      content: Text(l.mockDeleteBody),
+                                      actions: [
+                                        TextButton(
+                                          onPressed:
+                                              () =>
+                                                  Navigator.pop(dialog, false),
+                                          child: Text(l.mockCancel),
+                                        ),
+                                        FilledButton(
+                                          key: const Key('mock.confirmDelete'),
+                                          onPressed:
+                                              () => Navigator.pop(dialog, true),
+                                          child: Text(l.mockDelete),
+                                        ),
+                                      ],
+                                    ),
+                              );
+                              if (confirmed != true || !context.mounted) return;
+                              final deleted = await ref
+                                  .read(mockMutationProvider.notifier)
+                                  .delete(id);
+                              if (deleted && context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(l.mockDeleted)),
+                                );
+                                context.go('/mock-exams');
+                              }
+                            },
+                    child: Text(l.mockDelete),
+                  ),
+                ],
+              ),
+        ),
       ),
     );
   }
@@ -276,14 +285,14 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
         if (!didPop && !mutation.busy && step > 0) setState(() => step--);
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            saved != null
-                ? l.mockSaved
-                : widget.id == null
-                ? l.mockNew
-                : l.mockEdit,
-          ),
+        appBar: pageAppBar(
+          context,
+          title:
+              saved != null
+                  ? (widget.id == null ? l.mockSaved : l.mockUpdated)
+                  : widget.id == null
+                  ? l.mockNew
+                  : l.mockEdit,
           leading: BackButton(
             onPressed:
                 mutation.busy
@@ -301,36 +310,38 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
                     },
           ),
         ),
-        body:
-            saved != null
-                ? ListView(
-                  padding: const EdgeInsets.all(20),
-                  children: [
-                    MockBreakdown(saved!),
-                    FilledButton(
-                      onPressed: () => context.go('/mock-exams'),
-                      child: Text(l.mockToHistory),
-                    ),
-                    TextButton(
-                      onPressed: () => context.go('/home'),
-                      child: Text(l.mockHome),
-                    ),
-                  ],
-                )
-                : draft.when(
-                  loading:
-                      () => const Center(child: CircularProgressIndicator()),
-                  error:
-                      (e, _) => Center(
-                        child: MockError(
-                          mockIssue(e),
-                          retry:
-                              () =>
-                                  ref.invalidate(mockDraftProvider(widget.id)),
-                        ),
+        body: PageBody(
+          child:
+              saved != null
+                  ? ListView(
+                    padding: const EdgeInsets.all(AppSpace.lg),
+                    children: [
+                      MockBreakdown(saved!),
+                      FilledButton(
+                        onPressed: () => context.go('/mock-exams'),
+                        child: Text(l.mockToHistory),
                       ),
-                  data: (value) => _form(value, l, mutation),
-                ),
+                      TextButton(
+                        onPressed: () => context.go('/home'),
+                        child: Text(l.mockHome),
+                      ),
+                    ],
+                  )
+                  : draft.when(
+                    loading: () => const AppLoading(),
+                    error:
+                        (e, _) => Center(
+                          child: MockError(
+                            mockIssue(e),
+                            retry:
+                                () => ref.invalidate(
+                                  mockDraftProvider(widget.id),
+                                ),
+                          ),
+                        ),
+                    data: (value) => _form(value, l, mutation),
+                  ),
+        ),
       ),
     );
   }
@@ -340,18 +351,23 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
     AppLocalizations l,
     MockMutationState mutation,
   ) {
-    if (draft.answers.isEmpty) return Center(child: Text(l.mockNoSections));
+    if (draft.answers.isEmpty) return AppMessage(message: l.mockNoSections);
     return ListView(
-      padding: const EdgeInsets.all(20),
+      padding: AppSpace.page,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       children: [
-        Text('${step + 1} / 3', textAlign: TextAlign.center),
-        const SizedBox(height: 16),
+        StepProgress(label: l.mockStep(step + 1), step: step + 1, total: 3),
         if (step == 0) ...[
           TextFormField(
             key: const Key('mock.name'),
             initialValue: draft.name,
             maxLength: 200,
-            decoration: InputDecoration(labelText: l.mockName),
+            decoration: InputDecoration(
+              labelText: l.mockName,
+              errorText:
+                  invalid && draft.name.trim().isEmpty ? l.requiredField : null,
+            ),
+            textInputAction: TextInputAction.next,
             onChanged: (v) => draft.name = v,
             enabled: !mutation.busy,
           ),
@@ -360,22 +376,29 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
             title: Text(l.mockDate),
             subtitle: Text(dateText(draft.date)),
             trailing: const Icon(Icons.calendar_today),
-            onTap: () async {
-              final today =
-                  CalendarDate.local(ref.read(localNowProvider)()).pickerDate;
-              final selected = await showDatePicker(
-                context: context,
-                initialDate:
-                    draft.date.pickerDate.isAfter(today)
-                        ? today
-                        : draft.date.pickerDate,
-                firstDate: DateTime(1),
-                lastDate: today,
-              );
-              if (selected != null && mounted) {
-                setState(() => draft.date = CalendarDate.local(selected));
-              }
-            },
+            onTap:
+                mutation.busy
+                    ? null
+                    : () async {
+                      final today =
+                          CalendarDate.local(
+                            ref.read(localNowProvider)(),
+                          ).pickerDate;
+                      final selected = await showDatePicker(
+                        context: context,
+                        initialDate:
+                            draft.date.pickerDate.isAfter(today)
+                                ? today
+                                : draft.date.pickerDate,
+                        firstDate: DateTime(1),
+                        lastDate: today,
+                      );
+                      if (selected != null && mounted) {
+                        setState(
+                          () => draft.date = CalendarDate.local(selected),
+                        );
+                      }
+                    },
           ),
           TextFormField(
             key: const Key('mock.notes'),
@@ -404,7 +427,7 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
             ))
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(AppSpace.lg),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -413,26 +436,40 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text('${answer.section.questions} ${l.mockQuestions}'),
+                      const SizedBox(height: AppSpace.lg),
                       TextFormField(
                         key: Key('correct.${answer.section.id}'),
                         initialValue: answer.correct,
+                        enabled: !mutation.busy,
                         decoration: InputDecoration(labelText: l.mockCorrect),
+                        textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                         onChanged: (v) => setState(() => answer.correct = v),
                       ),
+                      const SizedBox(height: AppSpace.lg),
                       TextFormField(
                         key: Key('wrong.${answer.section.id}'),
                         initialValue: answer.wrong,
+                        enabled: !mutation.busy,
                         decoration: InputDecoration(labelText: l.mockWrong),
+                        textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                         onChanged: (v) => setState(() => answer.wrong = v),
                       ),
+                      if (answer.blank == null)
+                        AppMessage(
+                          message: l.mockCountsInvalid(
+                            answer.section.questions,
+                          ),
+                          error: true,
+                        ),
+                      const SizedBox(height: AppSpace.md),
                       Text(
                         '${l.mockBlank}: ${answer.blank ?? '—'}',
                         key: Key('blank.${answer.section.id}'),
@@ -456,11 +493,7 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
               ),
             ),
         ],
-        if (invalid)
-          Text(
-            l.mockValidation,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
+        if (invalid) AppMessage(message: l.mockValidation, error: true),
         if (mutation.issue != null)
           MockError(
             mutation.issue!,
@@ -482,7 +515,7 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
               }
             },
           ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSpace.lg),
         FilledButton(
           key: const Key('mock.next'),
           onPressed:
@@ -504,6 +537,7 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
                             );
                     setState(() => invalid = !valid);
                     if (!valid) return;
+                    FocusScope.of(context).unfocus();
                     if (step < 2) {
                       setState(() => step++);
                       return;
@@ -518,14 +552,10 @@ class _MockFormScreenState extends ConsumerState<MockFormScreen> {
                       });
                     }
                   },
-          child:
-              mutation.busy
-                  ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                  : Text(step == 2 ? l.mockSave : l.mockNext),
+          child: SubmitContent(
+            label: step == 2 ? l.mockSave : l.mockNext,
+            busy: mutation.busy,
+          ),
         ),
         if (step > 0)
           TextButton(

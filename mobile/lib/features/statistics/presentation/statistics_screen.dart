@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,45 +40,48 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
     final l = AppLocalizations.of(context)!;
     final data = ref.watch(statisticsProvider(range));
     return Scaffold(
-      appBar: AppBar(title: Text(l.statisticsTitle)),
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 680),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final option in ['5', '10', '20', 'all'])
-                        ChoiceChip(
-                          key: Key('statistics.range.$option'),
-                          label: Text(
-                            option == 'all'
-                                ? l.statisticsAll
-                                : l.statisticsLast(option),
+      appBar: pageAppBar(context, title: l.statisticsTitle),
+      body: PageBody(
+        child: RefreshIndicator(
+          onRefresh: refresh,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(AppSpace.lg),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: AppSpace.contentWidth,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final option in ['5', '10', '20', 'all'])
+                          ChoiceChip(
+                            key: Key('statistics.range.$option'),
+                            label: Text(
+                              option == 'all'
+                                  ? l.statisticsAll
+                                  : l.statisticsLast(option),
+                            ),
+                            selected: range == option,
+                            onSelected: (_) => setState(() => range = option),
                           ),
-                          selected: range == option,
-                          onSelected: (_) => setState(() => range = option),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  data.when(
-                    skipLoadingOnRefresh: false,
-                    skipLoadingOnReload: false,
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
-                    error: (e, _) => MockError(mockIssue(e), retry: refresh),
-                    data: (d) => content(d, l),
-                  ),
-                ],
+                      ],
+                    ),
+                    const SizedBox(height: AppSpace.lg),
+                    data.when(
+                      skipLoadingOnRefresh: false,
+                      skipLoadingOnReload: false,
+                      loading: () => const AppLoading(),
+                      error: (e, _) => MockError(mockIssue(e), retry: refresh),
+                      data: (d) => content(d, l),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -85,25 +90,20 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
     );
   }
 
-  Widget card(Widget child) =>
-      Card(child: Padding(padding: const EdgeInsets.all(16), child: child));
-  Widget title(String text) => Padding(
-    padding: const EdgeInsets.only(top: 24, bottom: 12),
-    child: Text(text, style: Theme.of(context).textTheme.titleLarge),
-  );
-  Widget metric(String label, String value) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(label),
-      Text(value, style: Theme.of(context).textTheme.titleLarge),
-    ],
-  );
+  Widget card(Widget child) => AppCard(child: child);
+  Widget title(String text) => SectionHeader(text);
+  Widget metric(String label, String value) =>
+      MetricValue(label: label, value: value);
   Widget metrics(StatisticsMetrics m, AppLocalizations l) => Wrap(
     spacing: 24,
     runSpacing: 16,
     children: [
       metric(l.dashboardLatest, m.latest?.display ?? '—'),
-      metric(l.dashboardAverage, m.average?.display ?? '—'),
+      MetricValue(
+        label: l.dashboardAverage,
+        value: m.average?.display ?? '—',
+        primary: true,
+      ),
       metric(l.dashboardBest, m.best?.display ?? '—'),
       metric(l.statisticsWorst, m.worst?.display ?? '—'),
       metric(l.dashboardCount, '${m.count}'),
@@ -121,17 +121,11 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
   );
   Widget content(Statistics d, AppLocalizations l) {
     if (d.metrics.count == 0) {
-      return card(
-        Column(
-          children: [
-            Text(l.statisticsEmpty),
-            const SizedBox(height: 12),
-            FilledButton(
-              onPressed: () => context.push('/mock-exams/new'),
-              child: Text(l.mockFirst),
-            ),
-          ],
-        ),
+      return AppMessage(
+        message: l.statisticsEmpty,
+        icon: Icons.insights_outlined,
+        actionLabel: l.mockFirst,
+        onAction: () => context.push('/mock-exams/new'),
       );
     }
     final section =
@@ -148,16 +142,12 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
         comparison(d.change, l),
         if (d.best != null) ...[
           title(l.statisticsBestMock),
-          Card(
-            child: ListTile(
-              key: const Key('statistics.best'),
-              title: Text(d.best!.name),
-              subtitle: Text(
-                '${d.best!.date.iso} · ${d.best!.net.display} ${l.mockNet}',
-              ),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push('/mock-exams/${d.best!.id}'),
-            ),
+          MockSummaryCard(
+            key: const Key('statistics.best'),
+            name: d.best!.name,
+            date: d.best!.date.iso,
+            net: '${d.best!.net.display} ${l.mockNet}',
+            onTap: () => context.push('/mock-exams/${d.best!.id}'),
           ),
         ],
         if (section != null) ...[
@@ -187,7 +177,10 @@ class _StatisticsScreenState extends ConsumerState<StatisticsScreen> {
           ],
           title(section.name),
           if (section.metrics.count == 0)
-            card(Text(l.statisticsSectionEmpty))
+            AppMessage(
+              message: l.statisticsSectionEmpty,
+              icon: Icons.show_chart,
+            )
           else ...[
             card(metrics(section.metrics, l)),
             card(
@@ -261,7 +254,7 @@ class AnswerDistribution extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${e.$1}: ${e.$2?.display ?? '—'}'),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpace.xs),
                     LinearProgressIndicator(
                       value:
                           maximum == 0 ? 0 : (e.$2?.chartValue ?? 0) / maximum,

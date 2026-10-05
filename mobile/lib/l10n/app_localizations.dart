@@ -96,7 +96,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeTagline.
   ///
   /// In tr, this message translates to:
-  /// **'Hedefine giden yolu netlerinle keşfet.'**
+  /// **'Denemelerini takip et, gelişimini gör.'**
   String get welcomeTagline;
 
   /// No description provided for @loginAction.
@@ -998,6 +998,42 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Tümü görünümü son {limit} denemeyi içeriyor. Toplam {available} denemen var.'**
   String statisticsCap(int limit, int available);
+
+  /// No description provided for @prepJourney.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sınavını, hedefini ve tarihini belirle.'**
+  String get prepJourney;
+
+  /// No description provided for @mockStep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adım {step} / 3'**
+  String mockStep(int step);
+
+  /// No description provided for @mockCountsInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğru ve yanlış toplamı {maximum} soruyu aşamaz.'**
+  String mockCountsInvalid(int maximum);
+
+  /// No description provided for @mockDeleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme silindi.'**
+  String get mockDeleted;
+
+  /// No description provided for @mockUpdated.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklikler kaydedildi.'**
+  String get mockUpdated;
+
+  /// No description provided for @chartSinglePoint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak.'**
+  String get chartSinglePoint;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

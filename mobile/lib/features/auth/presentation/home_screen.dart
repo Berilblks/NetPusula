@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,10 +42,12 @@ class HomeScreen extends ConsumerWidget {
           onRefresh: refresh,
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(AppSpace.lg),
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 680),
+                constraints: const BoxConstraints(
+                  maxWidth: AppSpace.contentWidth,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -51,40 +55,16 @@ class HomeScreen extends ConsumerWidget {
                       l.homeGreeting(auth.user!.displayName),
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 8,
-                      children: [
-                        FilledButton(
-                          onPressed: () => context.push('/mock-exams/new'),
-                          child: Text(l.mockAdd),
-                        ),
-                        TextButton(
-                          onPressed: () => context.push('/mock-exams'),
-                          child: Text(l.mockHistory),
-                        ),
-                        TextButton(
-                          onPressed: () => context.push('/statistics'),
-                          child: Text(l.statisticsEntry),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpace.lg),
                     dashboard.when(
                       skipLoadingOnRefresh: false,
                       skipLoadingOnReload: false,
-                      loading:
-                          () => const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(32),
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
+                      loading: () => const AppLoading(),
                       error: (e, _) => MockError(mockIssue(e), retry: refresh),
                       data: (d) => _content(context, d, l),
                     ),
-                    const SizedBox(height: 16),
+                    if (!dashboard.hasValue) _actions(context, l),
+                    const SizedBox(height: AppSpace.xl),
                     Wrap(
                       spacing: 12,
                       runSpacing: 8,
@@ -119,21 +99,35 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  Widget _actions(BuildContext context, AppLocalizations l) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: AppSpace.sm),
+    child: Wrap(
+      spacing: AppSpace.sm,
+      runSpacing: AppSpace.sm,
+      children: [
+        FilledButton.icon(
+          onPressed: () => context.push('/mock-exams/new'),
+          icon: const Icon(Icons.add),
+          label: Text(l.mockAdd),
+        ),
+        TextButton(
+          onPressed: () => context.push('/mock-exams'),
+          child: Text(l.mockHistory),
+        ),
+        TextButton(
+          onPressed: () => context.push('/statistics'),
+          child: Text(l.statisticsEntry),
+        ),
+      ],
+    ),
+  );
+
   Widget _content(BuildContext context, Dashboard d, AppLocalizations l) {
     final theme = Theme.of(context);
-    Widget card(Widget child) =>
-        Card(child: Padding(padding: const EdgeInsets.all(20), child: child));
-    Widget title(String text) => Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 12),
-      child: Text(text, style: theme.textTheme.titleLarge),
-    );
-    Widget metric(String label, Score? value) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: theme.textTheme.labelLarge),
-        Text(value?.display ?? '—', style: theme.textTheme.headlineSmall),
-      ],
-    );
+    Widget card(Widget child) => AppCard(child: child);
+    Widget title(String text) => SectionHeader(text);
+    Widget metric(String label, Score? value) =>
+        MetricValue(label: label, value: value?.display ?? '—');
     final difference = d.difference;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -144,7 +138,7 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Text(d.examCode, style: theme.textTheme.labelLarge),
               Text(d.examName, style: theme.textTheme.titleLarge),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpace.md),
               Text(l.targetLabel),
               Text(l.netValue(NetTarget.parse(d.target.value)!.turkish)),
               Text(switch (d.dateStatus) {
@@ -156,22 +150,18 @@ class HomeScreen extends ConsumerWidget {
             ],
           ),
         ),
+        _actions(context, l),
         if (d.count == 0)
-          card(
-            Column(
-              children: [
-                Text(l.mockEmpty),
-                const SizedBox(height: 12),
-                FilledButton(
-                  onPressed: () => context.push('/mock-exams/new'),
-                  child: Text(l.mockFirst),
-                ),
-              ],
-            ),
+          AppMessage(
+            message: l.mockEmpty,
+            icon: Icons.assignment_outlined,
+            actionLabel: l.mockFirst,
+            onAction: () => context.push('/mock-exams/new'),
           ),
         if (d.count > 0) ...[
-          card(
-            Column(
+          AppCard(
+            highlight: true,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(l.dashboardLatest),
@@ -179,11 +169,11 @@ class HomeScreen extends ConsumerWidget {
                   d.latest!.display,
                   key: const Key('dashboard.latest'),
                   style: theme.textTheme.displaySmall?.copyWith(
-                    color: theme.colorScheme.primary,
+                    color: theme.colorScheme.onPrimaryContainer,
                   ),
                 ),
                 Text('${l.dashboardCount}: ${d.count}'),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpace.lg),
                 Wrap(
                   spacing: 32,
                   runSpacing: 20,
@@ -192,7 +182,7 @@ class HomeScreen extends ConsumerWidget {
                     metric(l.dashboardBest, d.best),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: AppSpace.lg),
                 Text(
                   difference!.isZero
                       ? l.dashboardReached
@@ -236,7 +226,7 @@ class HomeScreen extends ConsumerWidget {
                   Text(
                     '${s.questions} ${l.mockQuestions} · ${l.dashboardCount}: ${s.count}',
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpace.md),
                   if (s.count == 0)
                     Text(l.dashboardNoData)
                   else
@@ -255,16 +245,12 @@ class HomeScreen extends ConsumerWidget {
         ],
         if (d.recent.isNotEmpty) title(l.dashboardRecent),
         for (final mock in d.recent)
-          Card(
-            child: ListTile(
-              key: Key('dashboard.recent.${mock.id}'),
-              title: Text(mock.name),
-              subtitle: Text(
-                '${DateFormat.yMMMMd('tr').format(mock.date.pickerDate)} · ${mock.net.display} ${l.mockNet}',
-              ),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => context.push('/mock-exams/${mock.id}'),
-            ),
+          MockSummaryCard(
+            key: Key('dashboard.recent.${mock.id}'),
+            name: mock.name,
+            date: DateFormat.yMMMMd('tr').format(mock.date.pickerDate),
+            net: '${mock.net.display} ${l.mockNet}',
+            onTap: () => context.push('/mock-exams/${mock.id}'),
           ),
       ],
     );

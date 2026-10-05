@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_brand.dart';
@@ -16,9 +18,9 @@ class SplashScreen extends ConsumerWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(AppSpace.xl),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
+              constraints: const BoxConstraints(maxWidth: AppSpace.formWidth),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -26,7 +28,7 @@ class SplashScreen extends ConsumerWidget {
                     AppBrand.name,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpace.xl),
                   if (state.status == AuthStatus.startupError) ...[
                     AuthNotice(authIssueText(l10n, state.issue!)),
                     FilledButton(
@@ -46,8 +48,8 @@ class SplashScreen extends ConsumerWidget {
                       child: Text(l10n.localSignOutAction),
                     ),
                   ] else ...[
-                    CircularProgressIndicator(semanticsLabel: l10n.pleaseWait),
-                    const SizedBox(height: 16),
+                    const AppLoading(),
+                    const SizedBox(height: AppSpace.lg),
                     Text(l10n.startupMessage),
                   ],
                 ],

@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get welcomeTagline => 'Hedefine giden yolu netlerinle keşfet.';
+  String get welcomeTagline => 'Denemelerini takip et, gelişimini gör.';
 
   @override
   String get loginAction => 'Giriş Yap';
@@ -476,4 +476,26 @@ class AppLocalizationsTr extends AppLocalizations {
   String statisticsCap(int limit, int available) {
     return 'Tümü görünümü son $limit denemeyi içeriyor. Toplam $available denemen var.';
   }
+
+  @override
+  String get prepJourney => 'Sınavını, hedefini ve tarihini belirle.';
+
+  @override
+  String mockStep(int step) {
+    return 'Adım $step / 3';
+  }
+
+  @override
+  String mockCountsInvalid(int maximum) {
+    return 'Doğru ve yanlış toplamı $maximum soruyu aşamaz.';
+  }
+
+  @override
+  String get mockDeleted => 'Deneme silindi.';
+
+  @override
+  String get mockUpdated => 'Değişiklikler kaydedildi.';
+
+  @override
+  String get chartSinglePoint => 'Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak.';
 }

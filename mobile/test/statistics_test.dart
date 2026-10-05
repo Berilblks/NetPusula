@@ -138,6 +138,8 @@ Future<ProviderContainer> mountStats(
   );
   await t.pumpAndSettle();
   if (navigate) {
+    await t.ensureVisible(find.text('Detaylı İstatistikler'));
+    await t.pump();
     await t.tap(find.text('Detaylı İstatistikler'));
     if (settle) {
       await t.pumpAndSettle();

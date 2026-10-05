@@ -1,3 +1,4 @@
+import '../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,19 +24,28 @@ class WelcomeScreen extends ConsumerWidget {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(AppSpace.xl),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
+              constraints: const BoxConstraints(maxWidth: AppSpace.formWidth),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(
-                    Icons.explore_outlined,
-                    size: 72,
-                    color: theme.colorScheme.primary,
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSpace.lg),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.explore_outlined,
+                        size: 56,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpace.xl),
                   Text(
                     AppBrand.name,
                     textAlign: TextAlign.center,
@@ -44,18 +54,18 @@ class WelcomeScreen extends ConsumerWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpace.lg),
                   Text(
                     l10n.welcomeTagline,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyLarge,
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: AppSpace.xxl),
                   FilledButton(
                     onPressed: state.busy ? null : () => navigate('/login'),
                     child: Text(l10n.loginAction),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpace.md),
                   OutlinedButton(
                     onPressed: state.busy ? null : () => navigate('/register'),
                     child: Text(l10n.registerAction),

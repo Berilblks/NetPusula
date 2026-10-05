@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../l10n/app_localizations.dart';
@@ -26,10 +28,8 @@ class PreparationLoadingScreen extends ConsumerWidget {
               child: Text(l.retryAction),
             ),
           ] else
-            Center(
-              child: CircularProgressIndicator(semanticsLabel: l.pleaseWait),
-            ),
-          const SizedBox(height: 24),
+            const AppLoading(),
+          const SizedBox(height: AppSpace.xl),
           TextButton(
             onPressed: () => ref.read(authControllerProvider.notifier).logout(),
             child: Text(l.logoutAction),

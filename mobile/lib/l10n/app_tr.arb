@@ -1,6 +1,6 @@
 {
   "@@locale": "tr",
-  "welcomeTagline": "Hedefine giden yolu netlerinle keşfet.",
+  "welcomeTagline": "Denemelerini takip et, gelişimini gör.",
   "loginAction": "Giriş Yap",
   "registerAction": "Hesap Oluştur",
   "logoutAction": "Çıkış Yap",
@@ -209,5 +209,25 @@
         "type": "int"
       }
     }
-  }
+  },
+  "prepJourney": "Sınavını, hedefini ve tarihini belirle.",
+  "mockStep": "Adım {step} / 3",
+  "@mockStep": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "mockCountsInvalid": "Doğru ve yanlış toplamı {maximum} soruyu aşamaz.",
+  "@mockCountsInvalid": {
+    "placeholders": {
+      "maximum": {
+        "type": "int"
+      }
+    }
+  },
+  "mockDeleted": "Deneme silindi.",
+  "mockUpdated": "Değişiklikler kaydedildi.",
+  "chartSinglePoint": "Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak."
 }

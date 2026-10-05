@@ -240,4 +240,11 @@ Kesin tanımlar, snapshot/katalog ilişkisi, sorgu ve grafik kararları: [Dashbo
 
 Ana sayfadaki **Detaylı İstatistikler** bağlantısı `/statistics` ekranını açar. `GET /api/statistics?range=20` son 5/10/20 veya tümü (son 500) için toplam/bölüm netleri, en iyi deneme, doğru/yanlış/boş ortalamaları, son 3/önceki 3 karşılaştırması ve deneme aralıklarını döndürür. Tüm hesaplar authenticated kullanıcının aktif hazırlığında backend decimal ile yapılır; JSON decimal-string sözleşmesi korunur. Yeni migration ve grafik bağımlılığı yoktur.
 
-API tanımları ve sınırlar: [Gelişmiş istatistikler](docs/advanced-statistics.md). Test/build/PostgreSQL kanıtı: [Faz 8 doğrulama](docs/phase8-validation.md). Faz 8 değişiklikleri inceleme için **commit ve push yapılmadan** bırakılır.
+API tanımları ve sınırlar: [Gelişmiş istatistikler](docs/advanced-statistics.md). Test/build/PostgreSQL kanıtı: [Faz 8 doğrulama](docs/phase8-validation.md). Faz 8 `d665dd9` commit’iyle tamamlandı.
+
+
+## Faz 9: mobil deneyim ve tasarım sistemi
+
+Material 3 açık/koyu tema, ortak spacing/typography/kart/durum bileşenleri; auth, onboarding, dashboard, statistics ve deneme akışlarının responsive/erişilebilir sunumu güncellendi. Backend, analytics hesapları, decimal-string sözleşmesi ve navigasyon guard'ları değişmedi. Yeni bağımlılık veya migration yoktur.
+
+Kararlar ve UI denetimi: [Tasarım sistemi](docs/design-system.md). Testler, emülatör gözlemleri ve sınırlar: [Faz 9 doğrulama](docs/phase9-validation.md). Bu faz inceleme için commit/push yapılmadan bırakılır.

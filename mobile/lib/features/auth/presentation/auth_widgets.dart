@@ -1,3 +1,5 @@
+import '../../../core/widgets/app_components.dart';
+import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import '../../../l10n/app_localizations.dart';
 
@@ -16,26 +18,29 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: pageAppBar(context, title: ''),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+            padding: AppSpace.page,
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
+              constraints: const BoxConstraints(maxWidth: AppSpace.formWidth),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    title,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      title,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpace.sm),
                   Text(subtitle, style: theme.textTheme.bodyLarge),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: AppSpace.xxl),
                   child,
                 ],
               ),
@@ -108,16 +113,8 @@ class AuthNotice extends StatelessWidget {
   const AuthNotice(this.message, {super.key});
   final String message;
   @override
-  Widget build(BuildContext context) => Semantics(
-    liveRegion: true,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        message,
-        style: TextStyle(color: Theme.of(context).colorScheme.error),
-      ),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      AppMessage(message: message, error: true);
 }
 
 class AuthSubmit extends StatelessWidget {
@@ -133,17 +130,6 @@ class AuthSubmit extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FilledButton(
     onPressed: busy ? null : onPressed,
-    child:
-        busy
-            ? SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Theme.of(context).colorScheme.onPrimary,
-                semanticsLabel: AppLocalizations.of(context)!.pleaseWait,
-              ),
-            )
-            : Text(label),
+    child: SubmitContent(label: label, busy: busy),
   );
 }
