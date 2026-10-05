@@ -1,3 +1,4 @@
+import '../../features/statistics/presentation/statistics_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return path == '/onboarding' ? null : '/onboarding';
         }
         if (preparation.status == PreparationStatus.ready) {
-          return {'/home', '/goal/edit'}.contains(path) ||
+          return {'/home', '/goal/edit', '/statistics'}.contains(path) ||
                   path == '/mock-exams' ||
                   path.startsWith('/mock-exams/')
               ? null
@@ -46,6 +47,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           : '/welcome';
     },
     routes: [
+      GoRoute(
+        path: '/statistics',
+        builder: (_, __) => const StatisticsScreen(),
+      ),
       GoRoute(path: '/', redirect: (_, __) => '/splash'),
       GoRoute(path: '/splash', builder: (_, __) => const SplashScreen()),
       GoRoute(path: '/welcome', builder: (_, __) => const WelcomeScreen()),

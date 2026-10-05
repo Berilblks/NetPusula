@@ -403,4 +403,77 @@ class AppLocalizationsTr extends AppLocalizations {
   String dashboardChange(String change) {
     return 'Son 3 deneme ortalaman önceki 3 denemeye göre $change net.';
   }
+
+  @override
+  String get statisticsTitle => 'İstatistikler';
+
+  @override
+  String get statisticsEntry => 'Detaylı İstatistikler';
+
+  @override
+  String get statisticsAll => 'Tümü';
+
+  @override
+  String statisticsLast(String count) {
+    return 'Son $count';
+  }
+
+  @override
+  String get statisticsWorst => 'En Düşük';
+
+  @override
+  String get statisticsInsufficient => 'Karşılaştırma için en az 6 deneme gerekli.';
+
+  @override
+  String get statisticsEmpty => 'Henüz istatistik oluşturacak denemen yok.';
+
+  @override
+  String get statisticsSectionEmpty => 'Bu bölüm için henüz veri yok.';
+
+  @override
+  String get statisticsOverview => 'Genel Bakış';
+
+  @override
+  String get statisticsBestMock => 'En İyi Deneme';
+
+  @override
+  String get statisticsSections => 'Bölüm Analizi';
+
+  @override
+  String get statisticsAnswers => 'Cevap Dağılımı';
+
+  @override
+  String get statisticsCorrect => 'Ortalama Doğru';
+
+  @override
+  String get statisticsWrong => 'Ortalama Yanlış';
+
+  @override
+  String get statisticsBlank => 'Ortalama Boş';
+
+  @override
+  String get statisticsActivity => 'Deneme Düzeni';
+
+  @override
+  String get statisticsFirst => 'İlk deneme';
+
+  @override
+  String get statisticsLatestDate => 'Son deneme';
+
+  @override
+  String get statisticsInterval => 'Ortalama gün aralığı';
+
+  @override
+  String get statisticsActivityHint => 'Seçili denemeler arasındaki takvim günü aralığıdır. Aynı gün yapılan denemeler sıfır gün aralıkla hesaba katılır.';
+
+  @override
+  String get statisticsAnswerHistory => 'Denemelere göre doğru / yanlış / boş';
+
+  @override
+  String get statisticsChartHint => 'Noktalar deneme sırasındadır; zaman aralıkları eşit olmayabilir.';
+
+  @override
+  String statisticsCap(int limit, int available) {
+    return 'Tümü görünümü son $limit denemeyi içeriyor. Toplam $available denemen var.';
+  }
 }

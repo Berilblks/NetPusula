@@ -1,3 +1,4 @@
+import '../../statistics/application/statistics_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../dashboard/application/dashboard_provider.dart';
 import '../../auth/application/auth_controller.dart';
@@ -132,6 +133,7 @@ class MockMutationController extends Notifier<MockMutationState> {
       if (!ref.mounted || epoch != _epoch) return null;
       ref.invalidate(mockHistoryProvider);
       ref.invalidate(dashboardProvider);
+      ref.invalidate(statisticsProvider);
       ref.invalidate(mockDetailProvider(result.id));
       state = const MockMutationState();
       return result;
@@ -152,6 +154,7 @@ class MockMutationController extends Notifier<MockMutationState> {
       if (!ref.mounted || epoch != _epoch) return false;
       ref.invalidate(mockHistoryProvider);
       ref.invalidate(dashboardProvider);
+      ref.invalidate(statisticsProvider);
       ref.invalidate(mockDetailProvider(id));
       state = const MockMutationState();
       return true;

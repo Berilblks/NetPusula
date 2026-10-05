@@ -3,20 +3,23 @@ import '../../../l10n/app_localizations.dart';
 import '../domain/dashboard.dart';
 
 class NetTrendChart extends StatelessWidget {
-  const NetTrendChart({required this.points, required this.target, super.key});
+  const NetTrendChart({required this.points, this.target, super.key});
   final List<TrendPoint> points;
-  final Score target;
+  final Score? target;
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     if (points.isEmpty) return Text(l.dashboardNoData);
-    final scores = [Score('0'), target, ...points.map((p) => p.net)]
-      ..sort((a, b) => a.chartValue.compareTo(b.chartValue));
+    final scores = [
+      Score('0'),
+      if (target != null) target!,
+      ...points.map((p) => p.net),
+    ]..sort((a, b) => a.chartValue.compareTo(b.chartValue));
     final low = scores.first, high = scores.last;
     final colors = Theme.of(context).colorScheme;
     return Semantics(
       label:
-          '${l.dashboardTrend}. ${l.targetLabel}: ${target.display}. ${points.map((p) => '${p.name}, ${p.date.iso}, ${p.net.display} ${l.mockNet}').join('; ')}',
+          '${l.dashboardTrend}. ${target == null ? '' : '${l.targetLabel}: ${target!.display}.'} ${points.map((p) => '${p.name}, ${p.date.iso}, ${p.net.display} ${l.mockNet}').join('; ')}',
       child: ExcludeSemantics(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -26,7 +29,8 @@ class NetTrendChart extends StatelessWidget {
               spacing: 12,
               children: [
                 Text('${l.mockNet}: ${low.display} – ${high.display}'),
-                Text('${l.targetLabel}: ${target.display}'),
+                if (target != null)
+                  Text('${l.targetLabel}: ${target!.display}'),
               ],
             ),
             const SizedBox(height: 8),
@@ -36,7 +40,7 @@ class NetTrendChart extends StatelessWidget {
                 key: const Key('dashboard.chart'),
                 painter: NetTrendPainter(
                   points.map((p) => p.net.chartValue).toList(),
-                  target.chartValue,
+                  target?.chartValue,
                   low.chartValue,
                   high.chartValue,
                   colors.primary,
@@ -54,7 +58,7 @@ class NetTrendChart extends StatelessWidget {
               ],
             ),
             Text(
-              l.dashboardChartHint,
+              target == null ? l.statisticsChartHint : l.dashboardChartHint,
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
@@ -75,7 +79,8 @@ class NetTrendPainter extends CustomPainter {
     this.axisColor,
   );
   final List<double> values;
-  final double target, low, high;
+  final double? target;
+  final double low, high;
   final Color lineColor, targetColor, axisColor;
   @override
   void paint(Canvas canvas, Size size) {
@@ -93,10 +98,10 @@ class NetTrendPainter extends CustomPainter {
         Paint()
           ..color = targetColor
           ..strokeWidth = 1.5;
-    for (double x = rect.left; x < rect.right; x += 10) {
+    for (double x = rect.left; target != null && x < rect.right; x += 10) {
       canvas.drawLine(
-        Offset(x, y(target)),
-        Offset((x + 5).clamp(rect.left, rect.right), y(target)),
+        Offset(x, y(target!)),
+        Offset((x + 5).clamp(rect.left, rect.right), y(target!)),
         reference,
       );
     }

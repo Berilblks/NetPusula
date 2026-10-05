@@ -169,5 +169,45 @@
         "type": "String"
       }
     }
+  },
+  "statisticsTitle": "İstatistikler",
+  "statisticsEntry": "Detaylı İstatistikler",
+  "statisticsAll": "Tümü",
+  "statisticsLast": "Son {count}",
+  "@statisticsLast": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "statisticsWorst": "En Düşük",
+  "statisticsInsufficient": "Karşılaştırma için en az 6 deneme gerekli.",
+  "statisticsEmpty": "Henüz istatistik oluşturacak denemen yok.",
+  "statisticsSectionEmpty": "Bu bölüm için henüz veri yok.",
+  "statisticsOverview": "Genel Bakış",
+  "statisticsBestMock": "En İyi Deneme",
+  "statisticsSections": "Bölüm Analizi",
+  "statisticsAnswers": "Cevap Dağılımı",
+  "statisticsCorrect": "Ortalama Doğru",
+  "statisticsWrong": "Ortalama Yanlış",
+  "statisticsBlank": "Ortalama Boş",
+  "statisticsActivity": "Deneme Düzeni",
+  "statisticsFirst": "İlk deneme",
+  "statisticsLatestDate": "Son deneme",
+  "statisticsInterval": "Ortalama gün aralığı",
+  "statisticsActivityHint": "Seçili denemeler arasındaki takvim günü aralığıdır. Aynı gün yapılan denemeler sıfır gün aralıkla hesaba katılır.",
+  "statisticsAnswerHistory": "Denemelere göre doğru / yanlış / boş",
+  "statisticsChartHint": "Noktalar deneme sırasındadır; zaman aralıkları eşit olmayabilir.",
+  "statisticsCap": "Tümü görünümü son {limit} denemeyi içeriyor. Toplam {available} denemen var.",
+  "@statisticsCap": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      },
+      "available": {
+        "type": "int"
+      }
+    }
   }
 }

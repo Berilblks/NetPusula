@@ -64,6 +64,10 @@ class HomeScreen extends ConsumerWidget {
                           onPressed: () => context.push('/mock-exams'),
                           child: Text(l.mockHistory),
                         ),
+                        TextButton(
+                          onPressed: () => context.push('/statistics'),
+                          child: Text(l.statisticsEntry),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),

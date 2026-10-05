@@ -8,6 +8,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<NetPusula.Application.Statistics.IStatisticsService, Statistics.StatisticsService>();
         services.AddScoped<NetPusula.Application.Dashboard.IDashboardService, Dashboard.DashboardService>();
         services.AddScoped<NetPusula.Application.MockExams.IMockExamService, MockExams.MockExamService>();
         services.AddScoped<NetPusula.Application.Preparations.IPreparationService, Preparations.PreparationService>();

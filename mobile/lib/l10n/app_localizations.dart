@@ -860,6 +860,144 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Son 3 deneme ortalaman önceki 3 denemeye göre {change} net.'**
   String dashboardChange(String change);
+
+  /// No description provided for @statisticsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstatistikler'**
+  String get statisticsTitle;
+
+  /// No description provided for @statisticsEntry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Detaylı İstatistikler'**
+  String get statisticsEntry;
+
+  /// No description provided for @statisticsAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tümü'**
+  String get statisticsAll;
+
+  /// No description provided for @statisticsLast.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son {count}'**
+  String statisticsLast(String count);
+
+  /// No description provided for @statisticsWorst.
+  ///
+  /// In tr, this message translates to:
+  /// **'En Düşük'**
+  String get statisticsWorst;
+
+  /// No description provided for @statisticsInsufficient.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılaştırma için en az 6 deneme gerekli.'**
+  String get statisticsInsufficient;
+
+  /// No description provided for @statisticsEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz istatistik oluşturacak denemen yok.'**
+  String get statisticsEmpty;
+
+  /// No description provided for @statisticsSectionEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bölüm için henüz veri yok.'**
+  String get statisticsSectionEmpty;
+
+  /// No description provided for @statisticsOverview.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel Bakış'**
+  String get statisticsOverview;
+
+  /// No description provided for @statisticsBestMock.
+  ///
+  /// In tr, this message translates to:
+  /// **'En İyi Deneme'**
+  String get statisticsBestMock;
+
+  /// No description provided for @statisticsSections.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bölüm Analizi'**
+  String get statisticsSections;
+
+  /// No description provided for @statisticsAnswers.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cevap Dağılımı'**
+  String get statisticsAnswers;
+
+  /// No description provided for @statisticsCorrect.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortalama Doğru'**
+  String get statisticsCorrect;
+
+  /// No description provided for @statisticsWrong.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortalama Yanlış'**
+  String get statisticsWrong;
+
+  /// No description provided for @statisticsBlank.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortalama Boş'**
+  String get statisticsBlank;
+
+  /// No description provided for @statisticsActivity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Deneme Düzeni'**
+  String get statisticsActivity;
+
+  /// No description provided for @statisticsFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk deneme'**
+  String get statisticsFirst;
+
+  /// No description provided for @statisticsLatestDate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son deneme'**
+  String get statisticsLatestDate;
+
+  /// No description provided for @statisticsInterval.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortalama gün aralığı'**
+  String get statisticsInterval;
+
+  /// No description provided for @statisticsActivityHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçili denemeler arasındaki takvim günü aralığıdır. Aynı gün yapılan denemeler sıfır gün aralıkla hesaba katılır.'**
+  String get statisticsActivityHint;
+
+  /// No description provided for @statisticsAnswerHistory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Denemelere göre doğru / yanlış / boş'**
+  String get statisticsAnswerHistory;
+
+  /// No description provided for @statisticsChartHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Noktalar deneme sırasındadır; zaman aralıkları eşit olmayabilir.'**
+  String get statisticsChartHint;
+
+  /// No description provided for @statisticsCap.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tümü görünümü son {limit} denemeyi içeriyor. Toplam {available} denemen var.'**
+  String statisticsCap(int limit, int available);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

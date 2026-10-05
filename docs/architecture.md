@@ -91,3 +91,10 @@ Ayrıntılı sözleşme ve kararlar: [mock-exam-tracking.md](mock-exam-tracking.
 Application Dashboard DTO/service sözleşmesi, Infrastructure DashboardService ve Api DashboardEndpoints eklenmiştir. Tek endpoint üç scalar sorgu ile aktif hazırlığın tutarlı görüntüsünü okur. Sonuçlar mevcut NetCalculator üzerinden streaming decimal aggregate'e girer; entity graph yüklemesi/N+1 yoktur. PostgreSQL RepeatableRead kullanılır. Yeni persist edilen istatistik veya migration yoktur.
 
 Flutter DashboardRepository + oturum/hazırlık bağımlı autoDispose FutureProvider kullanır. Mock create/edit/delete yalnız ilgili cache'leri invalidate eder. Home Material 3 kartları, özel düz çizgili grafik ve Semantics ile server verisini sunar. Double yalnız piksel geometrisindedir. Kesin istatistik ve performans kararları [dashboard-statistics.md](dashboard-statistics.md) içinde açıklanır.
+
+
+## Faz 8 — gelişmiş istatistikler
+
+Application Statistics DTO/service sözleşmesi, Infrastructure StatisticsService ve Api StatisticsEndpoints eklenmiştir. Mevcut veriden türetilir; şema/seed/migration değişmez. Aktif hazırlık + sayı + katalog + sınırlı deneme/sonuç akışı olmak üzere dört scalar SELECT tutarlı PostgreSQL RepeatableRead transaction'ında çalışır. Deneme sınırı join öncesindedir. NetCalculator ve dashboard ile paylaşılan DecimalAggregate tek decimal hesaplama kaynağıdır; ayrı Flutter/SQL formülü yoktur.
+
+İstatistikler ayrı `/statistics` rotasındadır. Range family FutureProvider eski filtre/oturum yanıtlarını ayırır. MockMutationController merkezi invalidation'ı genişletir. NetTrendChart opsiyonel hedefle tekrar kullanılır; erişilebilir cevap çubukları ve tarihsel cevap listesi eklenir. Detaylar [advanced-statistics.md](advanced-statistics.md), güncel gerçek PostgreSQL doğrulaması [phase8-validation.md](phase8-validation.md) içindedir. Önceki fazların Docker erişim kısıtı bu doğrulamada geçerli değildir.

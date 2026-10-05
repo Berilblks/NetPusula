@@ -43,7 +43,7 @@ app.UseExceptionHandler();
 app.UseStatusCodePages(async status =>
 {
     var context = status.HttpContext;
-    if (context.Request.Path.StartsWithSegments("/api/auth") || context.Request.Path.StartsWithSegments("/api/user-exams") || context.Request.Path.StartsWithSegments("/api/mock-exams") || context.Request.Path.StartsWithSegments("/api/dashboard"))
+    if (context.Request.Path.StartsWithSegments("/api/auth") || context.Request.Path.StartsWithSegments("/api/user-exams") || context.Request.Path.StartsWithSegments("/api/mock-exams") || context.Request.Path.StartsWithSegments("/api/dashboard") || context.Request.Path.StartsWithSegments("/api/statistics"))
         await Results.Problem(statusCode: context.Response.StatusCode,
             title: "The authentication request could not be processed.").ExecuteAsync(context);
 });
@@ -60,7 +60,7 @@ else
 app.UseCors();
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path.StartsWithSegments("/api/auth") || context.Request.Path.StartsWithSegments("/api/user-exams") || context.Request.Path.StartsWithSegments("/api/mock-exams") || context.Request.Path.StartsWithSegments("/api/dashboard"))
+    if (context.Request.Path.StartsWithSegments("/api/auth") || context.Request.Path.StartsWithSegments("/api/user-exams") || context.Request.Path.StartsWithSegments("/api/mock-exams") || context.Request.Path.StartsWithSegments("/api/dashboard") || context.Request.Path.StartsWithSegments("/api/statistics"))
     {
         context.Response.Headers.CacheControl = "no-store";
         context.Response.Headers.Pragma = "no-cache";
@@ -83,6 +83,7 @@ app.MapAuthEndpoints();
 app.MapPreparationEndpoints();
 app.MapMockExamEndpoints();
 app.MapDashboardEndpoints();
+app.MapStatisticsEndpoints();
 app.Run();
 
 public partial class Program { }

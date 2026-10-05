@@ -228,10 +228,16 @@ Home → Deneme Ekle → bilgi/bölüm sonuçları/kontrol → sunucu net özeti
 
 Yeni migration: `20261001114310_SnapshotMockSectionDisplay`. Backend çalıştırmadan önce mevcut kurulumdaki ortam değişkenleriyle `dotnet ef database update --project src/NetPusula.Infrastructure` uygulayın. Sayısal snapshot ve eski migration'lar değişmedi, yalnız tarihsel bölüm gösterim alanları eklendi.
 
-Sözleşme, pagination, tarih/snapshot/silme ve manuel kontroller: [Deneme takibi](docs/mock-exam-tracking.md). Komut sonuçları, testler ve dosya listesi: [Faz 6 doğrulama](docs/phase6-validation.md). Gerçek PostgreSQL doğrulaması Docker motoru erişilemediği için hâlâ bekliyor.
+Sözleşme, pagination, tarih/snapshot/silme ve manuel kontroller: [Deneme takibi](docs/mock-exam-tracking.md). Komut sonuçları, testler ve dosya listesi: [Faz 6 doğrulama](docs/phase6-validation.md). Gerçek PostgreSQL doğrulaması sonraki doğrulama çalışmasında ve Faz 7 kapsamında tamamlandı.
 
 ## Faz 7: performans dashboard'u
 
 `GET /api/dashboard` aktif hazırlığa ait son/ortalama/en iyi net, hedef farkı, son 20 denemelik trend, bölüm performansı ve son 3/önceki 3 karşılaştırmasını döndürür. Flutter ana sayfa bu API'yi gösterir; pull-to-refresh ve deneme mutasyonlarından sonra invalidation vardır. Yeni migration veya chart bağımlılığı yoktur. Decimal string sözleşmesi korunur.
 
-Kesin tanımlar, snapshot/katalog ilişkisi, sorgu ve grafik kararları: [Dashboard istatistikleri](docs/dashboard-statistics.md). Testler ve gerçek PostgreSQL sonuçları: [Faz 7 doğrulama](docs/phase7-validation.md). Faz 7 değişiklikleri commit/push yapılmadan incelemeye bırakılmıştır.
+Kesin tanımlar, snapshot/katalog ilişkisi, sorgu ve grafik kararları: [Dashboard istatistikleri](docs/dashboard-statistics.md). Testler ve gerçek PostgreSQL sonuçları: [Faz 7 doğrulama](docs/phase7-validation.md). Faz 7 `1fbef32` commit’iyle tamamlandı.
+
+## Faz 8: gelişmiş istatistikler
+
+Ana sayfadaki **Detaylı İstatistikler** bağlantısı `/statistics` ekranını açar. `GET /api/statistics?range=20` son 5/10/20 veya tümü (son 500) için toplam/bölüm netleri, en iyi deneme, doğru/yanlış/boş ortalamaları, son 3/önceki 3 karşılaştırması ve deneme aralıklarını döndürür. Tüm hesaplar authenticated kullanıcının aktif hazırlığında backend decimal ile yapılır; JSON decimal-string sözleşmesi korunur. Yeni migration ve grafik bağımlılığı yoktur.
+
+API tanımları ve sınırlar: [Gelişmiş istatistikler](docs/advanced-statistics.md). Test/build/PostgreSQL kanıtı: [Faz 8 doğrulama](docs/phase8-validation.md). Faz 8 değişiklikleri inceleme için **commit ve push yapılmadan** bırakılır.
