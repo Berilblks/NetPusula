@@ -207,6 +207,12 @@ void main() {
       );
       final c = await mountStats(t, f);
       expect(
+        f.calls,
+        ['20'],
+        reason:
+            'A failed request must show retry without automatic retry loops',
+      );
+      expect(
         find.text('Henüz istatistik oluşturacak denemen yok.'),
         findsNothing,
       );

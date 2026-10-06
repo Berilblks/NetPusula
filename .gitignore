@@ -28,4 +28,5 @@
 *.log
 .DS_Store
 Thumbs.db
+backend/validation/__pycache__/
 

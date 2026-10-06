@@ -31,4 +31,4 @@ final statisticsProvider = FutureProvider.autoDispose
         throw StateError('Statistics unavailable');
       }
       return ref.watch(statisticsRepositoryProvider).get(range);
-    });
+    }, retry: (_, _) => null);

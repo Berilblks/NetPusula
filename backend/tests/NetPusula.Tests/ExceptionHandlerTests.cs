@@ -17,6 +17,7 @@ public sealed class ExceptionHandlerTests
         var handled = await handler.TryHandleAsync(context, new InvalidOperationException("private connection details"), CancellationToken.None);
         Assert.True(handled);
         Assert.Equal(500, context.Response.StatusCode);
+        Assert.StartsWith("application/problem+json", context.Response.ContentType);
         body.Position = 0;
         using var json = await JsonDocument.ParseAsync(body);
         Assert.Equal("An unexpected error occurred.", json.RootElement.GetProperty("title").GetString());

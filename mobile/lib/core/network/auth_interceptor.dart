@@ -41,12 +41,25 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
-    final request = err.requestOptions;
-    if (err.response?.statusCode != 401) {
-      handler.next(err);
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
+    if (response.requestOptions.extra[_generation] != session.generation) {
+      handler.reject(
+        DioException(
+          requestOptions: response.requestOptions,
+          error: const AuthException(AuthIssue.sessionExpired),
+        ),
+      );
       return;
     }
+    handler.next(response);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final request = err.requestOptions;
     final generation = request.extra[_generation] as int?;
     if (generation == null || generation != session.generation) {
       handler.reject(
@@ -55,6 +68,10 @@ class AuthInterceptor extends Interceptor {
           error: const AuthException(AuthIssue.sessionExpired),
         ),
       );
+      return;
+    }
+    if (err.response?.statusCode != 401) {
+      handler.next(err);
       return;
     }
     try {

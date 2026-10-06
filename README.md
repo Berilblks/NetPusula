@@ -248,3 +248,9 @@ API tanımları ve sınırlar: [Gelişmiş istatistikler](docs/advanced-statisti
 Material 3 açık/koyu tema, ortak spacing/typography/kart/durum bileşenleri; auth, onboarding, dashboard, statistics ve deneme akışlarının responsive/erişilebilir sunumu güncellendi. Backend, analytics hesapları, decimal-string sözleşmesi ve navigasyon guard'ları değişmedi. Yeni bağımlılık veya migration yoktur.
 
 Kararlar ve UI denetimi: [Tasarım sistemi](docs/design-system.md). Testler, emülatör gözlemleri ve sınırlar: [Faz 9 doğrulama](docs/phase9-validation.md). Bu faz inceleme için commit/push yapılmadan bırakılır.
+
+## Faz 10: release hardening
+
+Production DB ayar doğrulaması, ProblemDetails içerik türü, tutarlı deneme okumaları, oturum sınırında geç gelen HTTP yanıtlarının reddi ve manuel ağ retry davranışı düzeltildi. Yeni migration/özellik yok; commit/push yapılmadı.
+
+[Güvenlik modeli](docs/security.md), [release kararları](docs/release-readiness.md), [doğrulama ve hata kaydı](docs/phase10-validation.md). Backend 193/193, Flutter 215/215; analyze temiz; debug ve arm64 release APK derlendi. Release artifact mevcut debug signing ile yalnız doğrulama içindir, mağazaya yüklenmemelidir.

@@ -30,6 +30,7 @@ final preparationControllerProvider =
 final localNowProvider = Provider<DateTime Function()>((ref) => DateTime.now);
 final examCatalogueProvider = FutureProvider.autoDispose<List<PreparationExam>>(
   (ref) => ref.watch(preparationRepositoryProvider).exams(),
+  retry: (_, _) => null,
 );
 
 class PreparationController extends Notifier<PreparationState> {

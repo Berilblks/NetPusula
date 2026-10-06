@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.EntityFrameworkCore;
 using NetPusula.Application.MockExams;
 using NetPusula.Application.Preparations;
@@ -11,6 +12,8 @@ public sealed class MockExamService(NetPusulaDbContext db, TimeProvider clock) :
     {
         if (page < 1 || pageSize < 1 || pageSize > 100 || (long)(page - 1) * pageSize > int.MaxValue)
             return new(Failure: MockFailure.Validation);
+        // Parent metadata and result rows must describe the same committed version.
+        await using var tx = await db.Database.BeginTransactionAsync(db.Database.IsNpgsql() ? IsolationLevel.RepeatableRead : IsolationLevel.Serializable, ct);
         var active = await db.UserExams.AsNoTracking().SingleOrDefaultAsync(p => p.UserId == user && p.IsActive, ct);
         if (active is null) return new(Failure: MockFailure.NoPreparation);
         var query = db.MockExams.AsNoTracking().Where(m => m.UserExamId == active.Id);
@@ -19,13 +22,19 @@ public sealed class MockExamService(NetPusulaDbContext db, TimeProvider clock) :
             .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);
         var ids = rows.Select(m => m.Id).ToArray();
         var results = await db.MockExamResults.AsNoTracking().Where(r => ids.Contains(r.MockExamId)).ToListAsync(ct);
-        return new(new(rows.Select(m => new MockSummaryDto(m.Id, m.Name, DateOnly.FromDateTime(m.TakenAtUtc),
-            results.Where(r => r.MockExamId == m.Id).Sum(r => r.Net), m.CreatedAtUtc)).ToList(), page, pageSize, count, (int)Math.Ceiling((decimal)count / pageSize)));
+        var dto = new MockPageDto(rows.Select(m => new MockSummaryDto(m.Id, m.Name, DateOnly.FromDateTime(m.TakenAtUtc),
+            results.Where(r => r.MockExamId == m.Id).Sum(r => r.Net), m.CreatedAtUtc)).ToList(), page, pageSize, count, (int)Math.Ceiling((decimal)count / pageSize));
+        await tx.CommitAsync(ct);
+        return new(dto);
     }
     public async Task<MockOutcome<MockDetailDto>> DetailAsync(Guid user, Guid id, CancellationToken ct)
     {
+        await using var tx = await db.Database.BeginTransactionAsync(db.Database.IsNpgsql() ? IsolationLevel.RepeatableRead : IsolationLevel.Serializable, ct);
         var row = await Owned(user).AsNoTracking().SingleOrDefaultAsync(m => m.Id == id, ct);
-        return row is null ? new(Failure: MockFailure.NotFound) : new(await Detail(row, ct));
+        if (row is null) return new(Failure: MockFailure.NotFound);
+        var dto = await Detail(row, ct);
+        await tx.CommitAsync(ct);
+        return new(dto);
     }
     public async Task<MockOutcome<MockDetailDto>> SaveAsync(Guid user, Guid? id, SaveMockExamRequest request, CancellationToken ct)
     {

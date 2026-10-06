@@ -105,3 +105,9 @@ Application Statistics DTO/service sözleşmesi, Infrastructure StatisticsServic
 `core/theme/design_tokens.dart` ölçü/radius değerlerini, `AppTheme` semantic renk ve component stillerini, `core/widgets/app_components.dart` sunum bileşenlerini toplar. Feature ekranları provider/repository ve route kararlarını sahiplenmeye devam eder; ortak UI katmanı veri erişimi veya business formülü içermez. `NetPusulaApp` sistem açık/koyu temasını ve status-bar kontrastını uygular.
 
 Backend/API/model/migration, Flutter data/domain/provider/routing ve decimal formatter değişmez. Mevcut chart painter'ı yalnız hafif kılavuz ve single-point açıklamasıyla güncellenir. Tasarım kararları: [design-system.md](design-system.md); test/visual kanıt: [phase9-validation.md](phase9-validation.md).
+
+## Faz 10 — güvenlik ve hata dayanıklılığı
+
+Development dışında ConnectionStrings:Database startup options validation ile denetlenir. Mock list/detail çoklu SELECT'leri dashboard/statistics gibi PostgreSQL RepeatableRead transaction'ına alındı; endpoint/DTO/model değişmedi. Global exception handler application/problem+json döndürür.
+
+AuthInterceptor başarılı ve hatalı HTTP yanıtlarında oturum generation sınırını denetler. Ağ okuyan beş FutureProvider varsayılan otomatik retry yerine ilk hatayı UI'a verir; kullanıcı retry/pull-to-refresh veya mutasyon invalidation'ı açıkça yeniden yükler. 401 single-flight/tek retry ayrı auth katmanında korunur. Yeni persistent cache yoktur. Detay: [security.md](security.md), [phase10-validation.md](phase10-validation.md).

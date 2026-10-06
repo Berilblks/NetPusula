@@ -28,4 +28,4 @@ final dashboardProvider = FutureProvider.autoDispose<Dashboard>((ref) async {
   }
   final result = await ref.watch(dashboardRepositoryProvider).get();
   return result;
-});
+}, retry: (_, _) => null);

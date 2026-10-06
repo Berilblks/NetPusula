@@ -24,7 +24,7 @@ final mockDetailProvider = FutureProvider.autoDispose.family<MockExam, String>((
 ) {
   ref.watch(mockScopeProvider);
   return ref.watch(mockRepositoryProvider).detail(id);
-});
+}, retry: (_, _) => null);
 final mockDraftProvider = FutureProvider.autoDispose.family<MockDraft, String?>(
   (ref, id) async {
     ref.watch(mockScopeProvider);
@@ -38,6 +38,7 @@ final mockDraftProvider = FutureProvider.autoDispose.family<MockDraft, String?>(
       answers: sections.map(MockAnswer.new).toList(),
     );
   },
+  retry: (_, _) => null,
 );
 
 class MockHistoryState {
