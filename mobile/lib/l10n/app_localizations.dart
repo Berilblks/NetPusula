@@ -1034,6 +1034,54 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak.'**
   String get chartSinglePoint;
+
+  /// No description provided for @homeEncouragement.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün de hedeflerine bir adım daha yaklaş!'**
+  String get homeEncouragement;
+
+  /// No description provided for @homeNavHome.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Sayfa'**
+  String get homeNavHome;
+
+  /// No description provided for @homeNavMocks.
+  ///
+  /// In tr, this message translates to:
+  /// **'Denemeler'**
+  String get homeNavMocks;
+
+  /// No description provided for @homeNavAdd.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ekle'**
+  String get homeNavAdd;
+
+  /// No description provided for @homeNavGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef'**
+  String get homeNavGoal;
+
+  /// No description provided for @homeNavStatistics.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstatistik'**
+  String get homeNavStatistics;
+
+  /// No description provided for @homeRecentTrend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son denemelerin'**
+  String get homeRecentTrend;
+
+  /// No description provided for @homeNetChange.
+  ///
+  /// In tr, this message translates to:
+  /// **'Net değişimi'**
+  String get homeNetChange;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

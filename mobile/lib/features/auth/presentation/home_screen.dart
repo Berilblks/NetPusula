@@ -1,3 +1,7 @@
+import 'package:flutter/services.dart';
+import '../../../core/constants/app_brand.dart';
+import '../../../core/widgets/compass_mark.dart';
+import '../../dashboard/presentation/premium_widgets.dart';
 import '../../../core/widgets/app_components.dart';
 import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +18,22 @@ import '../../dashboard/presentation/net_trend_chart.dart';
 import '../../mock_exams/data/mock_exam_repository.dart';
 import '../../mock_exams/presentation/mock_exam_screens.dart' show MockError;
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final _scroll = ScrollController();
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final auth = ref.watch(authControllerProvider),
         prep = ref.watch(preparationControllerProvider).active;
     if (auth.status != AuthStatus.authenticated ||
@@ -36,60 +52,133 @@ class HomeScreen extends ConsumerWidget {
       }
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: refresh,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(AppSpace.lg),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: AppSpace.contentWidth,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      l.homeGreeting(auth.user!.displayName),
-                      style: Theme.of(context).textTheme.headlineMedium,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        bottomNavigationBar: HomeNavigation(
+          onHome:
+              () => _scroll.animateTo(
+                0,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+              ),
+          onHistory: () => context.push('/mock-exams'),
+          onAdd: () => context.push('/mock-exams/new'),
+          onGoal: () => context.push('/goal/edit'),
+          onStatistics: () => context.push('/statistics'),
+        ),
+        body: DecoratedBox(
+          decoration: const BoxDecoration(gradient: BrandColors.header),
+          child: SafeArea(
+            bottom: false,
+            child: RefreshIndicator(
+              onRefresh: refresh,
+              child: SingleChildScrollView(
+                controller: _scroll,
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                  padding: const EdgeInsets.all(AppSpace.lg),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: AppSpace.contentWidth,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              gradient: BrandColors.header,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 20,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const CompassMark(size: 30, onDark: true),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        AppBrand.name,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium?.copyWith(
+                                          color: BrandColors.surface,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  l.homeGreeting(auth.user!.displayName),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineMedium?.copyWith(
+                                    color: BrandColors.surface,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  l.homeEncouragement,
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(color: BrandColors.surface),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: AppSpace.lg),
+                          dashboard.when(
+                            skipLoadingOnRefresh: false,
+                            skipLoadingOnReload: false,
+                            loading: () => const AppLoading(),
+                            error:
+                                (e, _) =>
+                                    MockError(mockIssue(e), retry: refresh),
+                            data: (d) => _content(context, d, l),
+                          ),
+                          if (!dashboard.hasValue) _actions(context, l),
+                          const SizedBox(height: AppSpace.xl),
+                          Wrap(
+                            spacing: 12,
+                            runSpacing: 8,
+                            children: [
+                              TextButton(
+                                onPressed: () => context.push('/goal/edit'),
+                                child: Text(l.editGoalAction),
+                              ),
+                              TextButton(
+                                onPressed: refresh,
+                                child: Text(l.dashboardRefresh),
+                              ),
+                              TextButton(
+                                onPressed:
+                                    auth.busy
+                                        ? null
+                                        : () =>
+                                            ref
+                                                .read(
+                                                  authControllerProvider
+                                                      .notifier,
+                                                )
+                                                .logout(),
+                                child: Text(l.logoutAction),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: AppSpace.lg),
-                    dashboard.when(
-                      skipLoadingOnRefresh: false,
-                      skipLoadingOnReload: false,
-                      loading: () => const AppLoading(),
-                      error: (e, _) => MockError(mockIssue(e), retry: refresh),
-                      data: (d) => _content(context, d, l),
-                    ),
-                    if (!dashboard.hasValue) _actions(context, l),
-                    const SizedBox(height: AppSpace.xl),
-                    Wrap(
-                      spacing: 12,
-                      runSpacing: 8,
-                      children: [
-                        TextButton(
-                          onPressed: () => context.push('/goal/edit'),
-                          child: Text(l.editGoalAction),
-                        ),
-                        TextButton(
-                          onPressed: refresh,
-                          child: Text(l.dashboardRefresh),
-                        ),
-                        TextButton(
-                          onPressed:
-                              auth.busy
-                                  ? null
-                                  : () =>
-                                      ref
-                                          .read(authControllerProvider.notifier)
-                                          .logout(),
-                          child: Text(l.logoutAction),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -124,7 +213,10 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _content(BuildContext context, Dashboard d, AppLocalizations l) {
     final theme = Theme.of(context);
-    Widget card(Widget child) => AppCard(child: child);
+    Widget card(Widget child) => Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: PremiumCard(child: child),
+    );
     Widget title(String text) => SectionHeader(text);
     Widget metric(String label, Score? value) =>
         MetricValue(label: label, value: value?.display ?? '—');
@@ -134,23 +226,113 @@ class HomeScreen extends ConsumerWidget {
       children: [
         card(
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(d.examCode, style: theme.textTheme.labelLarge),
-              Text(d.examName, style: theme.textTheme.titleLarge),
-              const SizedBox(height: AppSpace.md),
-              Text(l.targetLabel),
-              Text(l.netValue(NetTarget.parse(d.target.value)!.turkish)),
-              Text(switch (d.dateStatus) {
-                'past' => l.examPassed,
-                'today' => l.examToday,
-                _ => l.daysRemaining(d.days),
-              }),
-              Text(DateFormat.yMMMMd('tr').format(d.date.pickerDate)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CompassMark(size: 44),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(d.examCode, style: theme.textTheme.labelMedium),
+                        Text(d.examName, style: theme.textTheme.titleLarge),
+                        const SizedBox(height: 4),
+                        Wrap(
+                          spacing: 4,
+                          children: [
+                            Text('${l.targetLabel}:'),
+                            Text(
+                              l.netValue(
+                                NetTarget.parse(d.target.value)!.turkish,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: l.editGoalAction,
+                    onPressed: () => context.push('/goal/edit'),
+                    icon: const Icon(Icons.chevron_right),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final info = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l.dashboardLatest,
+                        style: theme.textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      if (difference != null)
+                        Text(
+                          difference.isZero
+                              ? l.dashboardReached
+                              : difference.negative
+                              ? '${l.dashboardAbove}: ${difference.absolute} ${l.mockNet}'
+                              : '${l.dashboardRemaining}: ${difference.display} ${l.mockNet}',
+                          key: const Key('dashboard.difference'),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.primary,
+                          ),
+                        )
+                      else
+                        Text(l.dashboardNoData),
+                      const SizedBox(height: 16),
+                      if (d.best != null) metric(l.dashboardBest, d.best),
+                    ],
+                  );
+                  final ring = TargetRing(latest: d.latest, target: d.target);
+                  return constraints.maxWidth < 280 ||
+                          MediaQuery.textScalerOf(context).scale(14) > 21
+                      ? Column(
+                        children: [ring, const SizedBox(height: 16), info],
+                      )
+                      : Row(
+                        children: [
+                          ring,
+                          const SizedBox(width: 16),
+                          Expanded(child: info),
+                        ],
+                      );
+                },
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 12,
+                runSpacing: 4,
+                children: [
+                  Text(switch (d.dateStatus) {
+                    'past' => l.examPassed,
+                    'today' => l.examToday,
+                    _ => l.daysRemaining(d.days),
+                  }),
+                  Text(
+                    DateFormat.yMMMMd('tr').format(d.date.pickerDate),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              if (d.trend.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                Text(l.homeRecentTrend, style: theme.textTheme.labelLarge),
+                MiniTrend(
+                  d.trend
+                      .skip(d.trend.length > 5 ? d.trend.length - 5 : 0)
+                      .toList(),
+                ),
+              ],
             ],
           ),
         ),
-        _actions(context, l),
         if (d.count == 0)
           AppMessage(
             message: l.mockEmpty,
@@ -159,43 +341,44 @@ class HomeScreen extends ConsumerWidget {
             onAction: () => context.push('/mock-exams/new'),
           ),
         if (d.count > 0) ...[
-          AppCard(
-            highlight: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(l.dashboardLatest),
-                Text(
-                  d.latest!.display,
-                  key: const Key('dashboard.latest'),
-                  style: theme.textTheme.displaySmall?.copyWith(
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns =
+                  MediaQuery.textScalerOf(context).scale(14) > 21 ? 1 : 3;
+              final width =
+                  (constraints.maxWidth - (columns - 1) * 8) / columns;
+              final values = [
+                (l.dashboardCount, '${d.count}'),
+                (l.dashboardAverage, d.average?.display ?? '—'),
+                (
+                  l.homeNetChange,
+                  d.enough && d.change != null
+                      ? '${d.change!.negative || d.change!.isZero ? '' : '+'}${d.change!.display}'
+                      : '—',
                 ),
-                Text('${l.dashboardCount}: ${d.count}'),
-                const SizedBox(height: AppSpace.lg),
-                Wrap(
-                  spacing: 32,
-                  runSpacing: 20,
-                  children: [
-                    metric(l.dashboardAverage, d.average),
-                    metric(l.dashboardBest, d.best),
-                  ],
-                ),
-                const SizedBox(height: AppSpace.lg),
-                Text(
-                  difference!.isZero
-                      ? l.dashboardReached
-                      : difference.negative
-                      ? '${l.dashboardAbove}: ${difference.absolute} ${l.mockNet}'
-                      : '${l.dashboardRemaining}: ${difference.display} ${l.mockNet}',
-                  key: const Key('dashboard.difference'),
-                ),
-              ],
-            ),
+              ];
+              return Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final value in values)
+                    SizedBox(
+                      width: width,
+                      child: PremiumCard(
+                        padding: const EdgeInsets.all(12),
+                        child: MetricValue(label: value.$1, value: value.$2),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
+          const SizedBox(height: 12),
+        ],
+        _actions(context, l),
+        if (d.count > 0) ...[
           title(l.dashboardTrend),
-          card(NetTrendChart(points: d.trend, target: d.target)),
+          card(NetTrendChart(points: d.trend, target: d.target, filled: true)),
         ],
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),

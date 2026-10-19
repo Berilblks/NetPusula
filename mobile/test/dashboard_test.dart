@@ -94,6 +94,7 @@ Future<ProviderContainer> mountDashboard(
   FakeDashboard fake, {
   MockHarness? harness,
   bool settle = true,
+  Widget Function(Widget)? wrap,
 }) async {
   final h = harness ?? MockHarness();
   final c = ProviderContainer(
@@ -106,7 +107,10 @@ Future<ProviderContainer> mountDashboard(
   addTearDown(c.dispose);
   addTearDown(h.h.dispose);
   await t.pumpWidget(
-    UncontrolledProviderScope(container: c, child: const NetPusulaApp()),
+    UncontrolledProviderScope(
+      container: c,
+      child: wrap?.call(const NetPusulaApp()) ?? const NetPusulaApp(),
+    ),
   );
   if (settle) {
     await t.pumpAndSettle();
@@ -131,7 +135,7 @@ void main() {
     await mountDashboard(t, FakeDashboard());
     expect(find.text('Merhaba, Deniz'), findsOneWidget);
     expect(find.text('Test ALES'), findsOneWidget);
-    expect(find.text('90 net'), findsOneWidget);
+    expect(find.textContaining('90 net'), findsOneWidget);
     expect(find.text('93 gün kaldı'), findsOneWidget);
   });
   for (final entry in [

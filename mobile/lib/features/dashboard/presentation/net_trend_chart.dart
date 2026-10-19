@@ -4,9 +4,15 @@ import '../../../l10n/app_localizations.dart';
 import '../domain/dashboard.dart';
 
 class NetTrendChart extends StatelessWidget {
-  const NetTrendChart({required this.points, this.target, super.key});
+  const NetTrendChart({
+    required this.points,
+    this.target,
+    this.filled = false,
+    super.key,
+  });
   final List<TrendPoint> points;
   final Score? target;
+  final bool filled;
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -47,6 +53,7 @@ class NetTrendChart extends StatelessWidget {
                   colors.primary,
                   colors.tertiary,
                   colors.outlineVariant,
+                  filled: filled,
                 ),
               ),
             ),
@@ -82,12 +89,15 @@ class NetTrendPainter extends CustomPainter {
     this.high,
     this.lineColor,
     this.targetColor,
-    this.axisColor,
-  );
+    this.axisColor, {
+    this.filled = false,
+    this.guides = true,
+  });
   final List<double> values;
   final double? target;
   final double low, high;
   final Color lineColor, targetColor, axisColor;
+  final bool filled, guides;
   @override
   void paint(Canvas canvas, Size size) {
     if (values.isEmpty || size.isEmpty) return;
@@ -98,10 +108,12 @@ class NetTrendPainter extends CustomPainter {
         Paint()
           ..color = axisColor
           ..strokeWidth = 1;
-    canvas.drawLine(rect.bottomLeft, rect.bottomRight, axis);
-    canvas.drawLine(rect.topLeft, rect.bottomLeft, axis);
+    if (guides) {
+      canvas.drawLine(rect.bottomLeft, rect.bottomRight, axis);
+      canvas.drawLine(rect.topLeft, rect.bottomLeft, axis);
+    }
     // Quiet reference guides; linear geometry and original values are unchanged.
-    for (final fraction in [.25, .5, .75]) {
+    for (final fraction in guides ? [.25, .5, .75] : <double>[]) {
       final guideY = rect.top + fraction * rect.height;
       canvas.drawLine(
         Offset(rect.left, guideY),
@@ -135,6 +147,25 @@ class NetTrendPainter extends CustomPainter {
     final path = Path()..moveTo(point(0).dx, point(0).dy);
     for (var i = 1; i < values.length; i++) {
       path.lineTo(point(i).dx, point(i).dy);
+    }
+    if (filled && values.length > 1) {
+      final area =
+          Path.from(path)
+            ..lineTo(point(values.length - 1).dx, y(0))
+            ..lineTo(point(0).dx, y(0))
+            ..close();
+      canvas.drawPath(
+        area,
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              lineColor.withValues(alpha: .18),
+              lineColor.withValues(alpha: .015),
+            ],
+          ).createShader(rect),
+      );
     }
     canvas.drawPath(path, line);
     for (var i = 0; i < values.length; i++) {

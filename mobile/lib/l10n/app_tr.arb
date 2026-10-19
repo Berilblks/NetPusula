@@ -229,5 +229,13 @@
   },
   "mockDeleted": "Deneme silindi.",
   "mockUpdated": "Değişiklikler kaydedildi.",
-  "chartSinglePoint": "Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak."
+  "chartSinglePoint": "Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak.",
+  "homeEncouragement": "Bugün de hedeflerine bir adım daha yaklaş!",
+  "homeNavHome": "Ana Sayfa",
+  "homeNavMocks": "Denemeler",
+  "homeNavAdd": "Ekle",
+  "homeNavGoal": "Hedef",
+  "homeNavStatistics": "İstatistik",
+  "homeRecentTrend": "Son denemelerin",
+  "homeNetChange": "Net değişimi"
 }

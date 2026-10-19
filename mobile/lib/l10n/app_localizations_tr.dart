@@ -498,4 +498,28 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get chartSinglePoint => 'Henüz tek deneme var; gelişim çizgisi sonraki denemelerle oluşacak.';
+
+  @override
+  String get homeEncouragement => 'Bugün de hedeflerine bir adım daha yaklaş!';
+
+  @override
+  String get homeNavHome => 'Ana Sayfa';
+
+  @override
+  String get homeNavMocks => 'Denemeler';
+
+  @override
+  String get homeNavAdd => 'Ekle';
+
+  @override
+  String get homeNavGoal => 'Hedef';
+
+  @override
+  String get homeNavStatistics => 'İstatistik';
+
+  @override
+  String get homeRecentTrend => 'Son denemelerin';
+
+  @override
+  String get homeNetChange => 'Net değişimi';
 }

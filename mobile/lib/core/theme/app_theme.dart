@@ -7,8 +7,17 @@ abstract final class AppTheme {
   static ThemeData _build(Brightness brightness) {
     final dark = brightness == Brightness.dark;
     final colors = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF146C60),
+      seedColor: BrandColors.purple,
       brightness: brightness,
+    ).copyWith(
+      primary: dark ? BrandColors.lavender : BrandColors.purple,
+      onPrimary: dark ? BrandColors.navy : BrandColors.surface,
+      surface: dark ? BrandColors.darkSurface : BrandColors.surface,
+      surfaceContainerLowest:
+          dark ? BrandColors.darkSurface : BrandColors.surface,
+      onSurface: dark ? BrandColors.darkText : BrandColors.navy,
+      onSurfaceVariant:
+          dark ? BrandColors.darkSecondary : BrandColors.readableSecondary,
     );
     final base = ThemeData(
       useMaterial3: true,
@@ -60,10 +69,10 @@ abstract final class AppTheme {
     return base.copyWith(
       textTheme: text,
       scaffoldBackgroundColor:
-          dark ? const Color(0xFF101917) : const Color(0xFFF3F7F5),
+          dark ? BrandColors.darkBackground : BrandColors.background,
       appBarTheme: AppBarTheme(
         backgroundColor:
-            dark ? const Color(0xFF101917) : const Color(0xFFF3F7F5),
+            dark ? BrandColors.darkBackground : BrandColors.background,
         foregroundColor: colors.onSurface,
         elevation: 0,
         scrolledUnderElevation: 0,
