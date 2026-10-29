@@ -1,5 +1,9 @@
 # NetPusula
 
+Premium auth ve Google giriş kurulumu: [Google Sign-In rehberi](docs/google-signin-setup.md).
+Uygulama ve doğrulama durumu: [Premium auth doğrulaması](docs/premium-auth-validation.md).
+Google OAuth istemcileri yapılandırılana kadar Google girişi etkin değildir.
+
 Türkiye'de ÖSYM sınavlarına hazırlananlar için mobil uygulama. Faz 1–7 kapsamında domain/veritabanı, authentication, tek aktif hazırlık/onboarding ve deneme ekleme, düzenleme, silme, bölüm sonuçları ve sayfalı geçmiş hazırdır. Aktif hazırlığa ait dashboard, istatistik ve net gelişim grafiği de hazırdır; alt gezinme henüz kapsamda değildir.
 
 ## Teknolojiler ve gereksinimler

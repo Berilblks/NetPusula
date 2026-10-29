@@ -15,6 +15,13 @@ public sealed class User : Entity
     public string DisplayName { get; private set; } = null!;
     // Existing pre-authentication records may have no credentials.
     public string? PasswordHash { get; private set; }
+    public string? GoogleSubject { get; private set; }
+    public void SetGoogleSubject(string subject)
+    {
+        if (GoogleSubject is not null || PasswordHash is not null)
+            throw new InvalidOperationException("An existing credential cannot be implicitly linked.");
+        GoogleSubject = Guard.Text(subject, 255);
+    }
     public static string NormalizeEmail(string email) => email.Trim().ToUpperInvariant();
     public void SetPasswordHash(string hash) => PasswordHash = Guard.Text(hash, 1024);
 }

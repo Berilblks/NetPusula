@@ -17,6 +17,10 @@ public static class AuthSetup
     public static IServiceCollection AddNetPusulaAuthentication(this IServiceCollection services)
     {
         services.AddSingleton(TimeProvider.System);
+        services.AddOptions<GoogleAuthOptions>().BindConfiguration("GoogleAuth")
+            .Validate(x => x.IsValid(), "Configure GoogleAuth audiences with Web/server OAuth client IDs when enabled.").ValidateOnStart();
+        services.AddSingleton<IGoogleSigningKeys, GoogleSigningKeys>();
+        services.AddSingleton<IGoogleTokenValidator, GoogleTokenValidator>();
         services.Configure<Microsoft.AspNetCore.Routing.RouteHandlerOptions>(x => x.ThrowOnBadRequest = false);
         services.AddOptions<JwtOptions>().BindConfiguration("Jwt")
             .Validate(x => x.IsValid(), "Configure Jwt issuer/audience, a Base64 signing key of 32-128 random bytes and a 1-60 minute lifetime.")

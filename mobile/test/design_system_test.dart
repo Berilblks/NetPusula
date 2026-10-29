@@ -8,7 +8,7 @@ import 'package:netpusula/core/theme/app_theme.dart';
 import 'package:netpusula/core/widgets/app_components.dart';
 import 'package:netpusula/core/routing/app_router.dart';
 import 'package:netpusula/features/dashboard/presentation/net_trend_chart.dart';
-import 'package:netpusula/features/auth/presentation/auth_widgets.dart';
+import 'package:netpusula/features/auth/presentation/premium_auth_page.dart';
 import 'package:netpusula/features/statistics/presentation/statistics_screen.dart';
 import 'widget_test.dart' show mount, field, tapVisible;
 import 'mock_exam_test.dart' show MockHarness, mountMock, newReview;
@@ -358,7 +358,7 @@ void main() {
         t
             .widget<FilledButton>(
               find.descendant(
-                of: find.byType(AuthSubmit),
+                of: find.byType(PremiumAuthSubmit),
                 matching: find.byType(FilledButton),
               ),
             )

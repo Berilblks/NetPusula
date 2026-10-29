@@ -120,7 +120,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Tekrar hoş geldin'**
+  /// **'Giriş Yap'**
   String get loginTitle;
 
   /// No description provided for @loginSubtitle.
@@ -132,13 +132,13 @@ abstract class AppLocalizations {
   /// No description provided for @registerTitle.
   ///
   /// In tr, this message translates to:
-  /// **'İlk adımı at'**
+  /// **'Hesabını Oluştur'**
   String get registerTitle;
 
   /// No description provided for @registerSubtitle.
   ///
   /// In tr, this message translates to:
-  /// **'Hesabını oluştur, yolculuğuna başla.'**
+  /// **'Sınav yolculuğuna ilk adımını at.'**
   String get registerSubtitle;
 
   /// No description provided for @emailLabel.
@@ -156,7 +156,7 @@ abstract class AppLocalizations {
   /// No description provided for @nameLabel.
   ///
   /// In tr, this message translates to:
-  /// **'Ad / Görünen Ad'**
+  /// **'Ad Soyad'**
   String get nameLabel;
 
   /// No description provided for @passwordConfirmation.
@@ -186,7 +186,7 @@ abstract class AppLocalizations {
   /// No description provided for @haveAccount.
   ///
   /// In tr, this message translates to:
-  /// **'Zaten hesabın var mı? Giriş Yap'**
+  /// **'Zaten hesabın var mı? Giriş yap'**
   String get haveAccount;
 
   /// No description provided for @requiredField.
@@ -324,7 +324,7 @@ abstract class AppLocalizations {
   /// No description provided for @prepWelcome.
   ///
   /// In tr, this message translates to:
-  /// **'Şimdi hedefini birlikte belirleyelim.'**
+  /// **'Sınav yolculuğunu planla'**
   String get prepWelcome;
 
   /// No description provided for @prepWelcomeBody.
@@ -1082,6 +1082,114 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Net değişimi'**
   String get homeNetChange;
+
+  /// No description provided for @authOr.
+  ///
+  /// In tr, this message translates to:
+  /// **'veya'**
+  String get authOr;
+
+  /// No description provided for @googleContinue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile devam et'**
+  String get googleContinue;
+
+  /// No description provided for @googleRejected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile giriş tamamlanamadı. Bağlantını kontrol edip tekrar dene.'**
+  String get googleRejected;
+
+  /// No description provided for @googleConflict.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu e-posta ile bir hesap zaten var. Mevcut giriş yöntemini kullan. Hesaplar otomatik birleştirilmez.'**
+  String get googleConflict;
+
+  /// No description provided for @googleUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile giriş şu anda kullanılamıyor. E-posta ve şifrenle devam edebilirsin.'**
+  String get googleUnavailable;
+
+  /// No description provided for @registerSubmit.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıt Ol'**
+  String get registerSubmit;
+
+  /// No description provided for @accountTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap Ayarları'**
+  String get accountTitle;
+
+  /// No description provided for @accountGoogleLink.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google Hesabını Bağla'**
+  String get accountGoogleLink;
+
+  /// No description provided for @accountGoogleLinked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google hesabı bağlı'**
+  String get accountGoogleLinked;
+
+  /// No description provided for @accountLinkedSuccess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google hesabın bağlandı. Artık iki giriş yöntemiyle de aynı hesabını kullanabilirsin.'**
+  String get accountLinkedSuccess;
+
+  /// No description provided for @accountLinkExplanation.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mevcut şifreni doğrula ve bağlamak istediğin Google hesabını seç. Verilerin aynı hesapta korunur. Google e-postan farklı olabilir; bu işlem hesapları birleştirmez.'**
+  String get accountLinkExplanation;
+
+  /// No description provided for @accountCurrentPassword.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mevcut şifre'**
+  String get accountCurrentPassword;
+
+  /// No description provided for @accountPasswordRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlamak için mevcut şifreni gir.'**
+  String get accountPasswordRequired;
+
+  /// No description provided for @accountPasswordIncorrect.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mevcut şifren doğrulanamadı. Tekrar dene.'**
+  String get accountPasswordIncorrect;
+
+  /// No description provided for @accountLinkConflict.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu Google hesabı başka bir hesaba bağlı veya mevcut Google bağlantın farklı. Bağlantı değiştirilmedi.'**
+  String get accountLinkConflict;
+
+  /// No description provided for @accountLoadError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap bilgileri yüklenemedi. Tekrar dene.'**
+  String get accountLoadError;
+
+  /// No description provided for @accountRetry.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar dene'**
+  String get accountRetry;
+
+  /// No description provided for @accountTogglePassword.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifreyi göster veya gizle'**
+  String get accountTogglePassword;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

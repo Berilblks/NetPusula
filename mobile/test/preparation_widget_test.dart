@@ -78,6 +78,7 @@ Future<ProviderContainer> mountPreparation(
   WidgetTester tester,
   PreparationHarness p, {
   bool settle = true,
+  Widget Function(Widget)? wrap,
 }) async {
   final c = ProviderContainer(
     overrides: [
@@ -88,7 +89,10 @@ Future<ProviderContainer> mountPreparation(
   addTearDown(c.dispose);
   addTearDown(p.h.dispose);
   await tester.pumpWidget(
-    UncontrolledProviderScope(container: c, child: const NetPusulaApp()),
+    UncontrolledProviderScope(
+      container: c,
+      child: wrap?.call(const NetPusulaApp()) ?? const NetPusulaApp(),
+    ),
   );
   if (settle) {
     await tester.pumpAndSettle();
@@ -128,7 +132,7 @@ void main() {
     tester,
   ) async {
     final c = await mountPreparation(tester, PreparationHarness());
-    expect(find.text('Şimdi hedefini birlikte belirleyelim.'), findsOneWidget);
+    expect(find.text('Sınav yolculuğunu planla'), findsOneWidget);
     for (final path in ['/home', '/goal/edit']) {
       c.read(appRouterProvider).go(path);
       await tester.pumpAndSettle();
@@ -167,17 +171,17 @@ void main() {
     await mountPreparation(tester, p, settle: false);
     await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Merhaba, Deniz'), findsNothing);
-    expect(find.text('Şimdi hedefini birlikte belirleyelim.'), findsNothing);
+    expect(find.text('Sınav yolculuğunu planla'), findsNothing);
     p.lookupGate!.complete();
     await tester.pumpAndSettle();
-    expect(find.text('Şimdi hedefini birlikte belirleyelim.'), findsOneWidget);
+    expect(find.text('Sınav yolculuğunu planla'), findsOneWidget);
   });
   testWidgets(
     'Offline lookup stays in protected retry state rather than onboarding',
     (tester) async {
       final p = PreparationHarness(hasActive: true)..offline = true;
       await mountPreparation(tester, p);
-      expect(find.text('Şimdi hedefini birlikte belirleyelim.'), findsNothing);
+      expect(find.text('Sınav yolculuğunu planla'), findsNothing);
       expect(find.text('Tekrar Dene'), findsOneWidget);
       p.offline = false;
       await tapVisible(tester, find.text('Tekrar Dene'));

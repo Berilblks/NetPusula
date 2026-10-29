@@ -21,16 +21,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get logoutAction => 'Çıkış Yap';
 
   @override
-  String get loginTitle => 'Tekrar hoş geldin';
+  String get loginTitle => 'Giriş Yap';
 
   @override
   String get loginSubtitle => 'Hedefine kaldığın yerden devam et.';
 
   @override
-  String get registerTitle => 'İlk adımı at';
+  String get registerTitle => 'Hesabını Oluştur';
 
   @override
-  String get registerSubtitle => 'Hesabını oluştur, yolculuğuna başla.';
+  String get registerSubtitle => 'Sınav yolculuğuna ilk adımını at.';
 
   @override
   String get emailLabel => 'E-posta';
@@ -39,7 +39,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get passwordLabel => 'Şifre';
 
   @override
-  String get nameLabel => 'Ad / Görünen Ad';
+  String get nameLabel => 'Ad Soyad';
 
   @override
   String get passwordConfirmation => 'Şifre Tekrar';
@@ -54,7 +54,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noAccount => 'Hesabın yok mu? Hesap Oluştur';
 
   @override
-  String get haveAccount => 'Zaten hesabın var mı? Giriş Yap';
+  String get haveAccount => 'Zaten hesabın var mı? Giriş yap';
 
   @override
   String get requiredField => 'Bu alanı doldur.';
@@ -125,7 +125,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeWelcome => 'NetPusula’ya hoş geldin.';
 
   @override
-  String get prepWelcome => 'Şimdi hedefini birlikte belirleyelim.';
+  String get prepWelcome => 'Sınav yolculuğunu planla';
 
   @override
   String get prepWelcomeBody => 'Önce hazırlandığın sınavı seç. Hedefini ve sınav tarihini birlikte belirleyelim.';
@@ -522,4 +522,58 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get homeNetChange => 'Net değişimi';
+
+  @override
+  String get authOr => 'veya';
+
+  @override
+  String get googleContinue => 'Google ile devam et';
+
+  @override
+  String get googleRejected => 'Google ile giriş tamamlanamadı. Bağlantını kontrol edip tekrar dene.';
+
+  @override
+  String get googleConflict => 'Bu e-posta ile bir hesap zaten var. Mevcut giriş yöntemini kullan. Hesaplar otomatik birleştirilmez.';
+
+  @override
+  String get googleUnavailable => 'Google ile giriş şu anda kullanılamıyor. E-posta ve şifrenle devam edebilirsin.';
+
+  @override
+  String get registerSubmit => 'Kayıt Ol';
+
+  @override
+  String get accountTitle => 'Hesap Ayarları';
+
+  @override
+  String get accountGoogleLink => 'Google Hesabını Bağla';
+
+  @override
+  String get accountGoogleLinked => 'Google hesabı bağlı';
+
+  @override
+  String get accountLinkedSuccess => 'Google hesabın bağlandı. Artık iki giriş yöntemiyle de aynı hesabını kullanabilirsin.';
+
+  @override
+  String get accountLinkExplanation => 'Mevcut şifreni doğrula ve bağlamak istediğin Google hesabını seç. Verilerin aynı hesapta korunur. Google e-postan farklı olabilir; bu işlem hesapları birleştirmez.';
+
+  @override
+  String get accountCurrentPassword => 'Mevcut şifre';
+
+  @override
+  String get accountPasswordRequired => 'Bağlamak için mevcut şifreni gir.';
+
+  @override
+  String get accountPasswordIncorrect => 'Mevcut şifren doğrulanamadı. Tekrar dene.';
+
+  @override
+  String get accountLinkConflict => 'Bu Google hesabı başka bir hesaba bağlı veya mevcut Google bağlantın farklı. Bağlantı değiştirilmedi.';
+
+  @override
+  String get accountLoadError => 'Hesap bilgileri yüklenemedi. Tekrar dene.';
+
+  @override
+  String get accountRetry => 'Tekrar dene';
+
+  @override
+  String get accountTogglePassword => 'Şifreyi göster veya gizle';
 }

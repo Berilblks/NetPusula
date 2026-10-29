@@ -157,6 +157,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Text(l.editGoalAction),
                               ),
                               TextButton(
+                                onPressed: () => context.push('/account'),
+                                child: Text(l.accountTitle),
+                              ),
+                              TextButton(
                                 onPressed: refresh,
                                 child: Text(l.dashboardRefresh),
                               ),

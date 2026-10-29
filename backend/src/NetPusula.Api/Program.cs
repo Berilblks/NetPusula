@@ -4,10 +4,7 @@ using NetPusula.Api;
 using NetPusula.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOptions<DatabaseConnectionOptions>().BindConfiguration("ConnectionStrings")
-    .Validate(x => builder.Environment.IsDevelopment() || x.IsValid(),
-        "Configure a valid database connection with explicit host and database before starting outside Development.")
-    .ValidateOnStart();
+builder.Services.AddDatabaseConnectionValidation(builder.Environment);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddNetPusulaAuthentication();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

@@ -25,6 +25,8 @@ internal static class DomainModelConfiguration
         user.Property(x => x.DisplayName).HasMaxLength(120).IsRequired();
         user.Property(x => x.PasswordHash).HasMaxLength(1024);
         user.HasIndex(x => x.NormalizedEmail).IsUnique();
+        user.Property(x => x.GoogleSubject).HasMaxLength(255);
+        user.HasIndex(x => x.GoogleSubject).IsUnique();
 
         var exam = Base<Exam>(model, "Exams");
         exam.Property(x => x.Code).HasMaxLength(64).IsRequired();

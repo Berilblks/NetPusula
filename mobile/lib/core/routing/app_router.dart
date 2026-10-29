@@ -1,4 +1,5 @@
 import '../../features/statistics/presentation/statistics_screen.dart';
+import '../../features/auth/presentation/account_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +30,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         return path == '/splash' ? null : '/splash';
       }
       if (auth.status == AuthStatus.authenticated) {
+        if (path == '/account') return null;
         final preparation = ref.read(preparationControllerProvider);
         if (preparation.status == PreparationStatus.none) {
           return path == '/onboarding' ? null : '/onboarding';
@@ -47,6 +49,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           : '/welcome';
     },
     routes: [
+      GoRoute(path: '/account', builder: (_, __) => const AccountScreen()),
       GoRoute(
         path: '/statistics',
         builder: (_, __) => const StatisticsScreen(),

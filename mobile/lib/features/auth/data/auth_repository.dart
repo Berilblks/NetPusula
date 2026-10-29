@@ -96,6 +96,23 @@ class AuthRepository implements AuthSessionDelegate {
     '/api/auth/login',
     {'email': email.trim(), 'password': password},
   );
+  Future<AuthUser> google(String idToken) =>
+      _authenticate('/api/auth/google', {'idToken': idToken});
+  Future<AuthUser> linkGoogle(String idToken, String password) async {
+    final expected = _generation;
+    final data = {'idToken': idToken, 'currentPassword': password};
+    try {
+      final response = await client.post<dynamic>(
+        '/api/auth/google/link',
+        data: data,
+      );
+      _check(expected);
+      return AuthUser.fromJson(response.data as Map<String, dynamic>);
+    } finally {
+      data.clear();
+    }
+  }
+
   Future<AuthUser> register(
     String displayName,
     String email,

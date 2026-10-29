@@ -1,3 +1,4 @@
+import '../../auth/presentation/premium_auth_page.dart';
 import '../../../core/widgets/app_components.dart';
 import '../../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -140,9 +141,14 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop && !state.saving && !widget.edit) back();
       },
-      child: AuthPage(
+      child: page(
         title: widget.edit ? l.editGoalAction : titles[step],
-        subtitle: widget.edit ? selected?.code ?? '' : l.prepJourney,
+        subtitle:
+            widget.edit
+                ? selected?.code ?? ''
+                : step == 0
+                ? l.prepWelcomeBody
+                : l.prepJourney,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -158,18 +164,6 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
               const SizedBox(height: AppSpace.xl),
               dateField(l, state.saving),
             ] else ...[
-              if (step == 0) ...[
-                Icon(
-                  Icons.explore_outlined,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: AppSpace.xl),
-                Text(
-                  l.prepWelcomeBody,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
               if (step == 1) examList(l),
               if (step == 2) targetField(l, state.saving),
               if (step == 3) dateField(l, state.saving),
@@ -222,6 +216,20 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
       ),
     );
   }
+
+  Widget page({
+    required String title,
+    required String subtitle,
+    required Widget child,
+  }) =>
+      widget.edit
+          ? AuthPage(title: title, subtitle: subtitle, child: child)
+          : PremiumAuthPage(
+            title: title,
+            subtitle: subtitle,
+            onboarding: true,
+            child: child,
+          );
 
   Widget targetField(AppLocalizations l, bool busy) => Form(
     key: form,

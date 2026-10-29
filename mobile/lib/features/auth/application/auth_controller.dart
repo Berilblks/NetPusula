@@ -5,6 +5,7 @@ import '../../../core/config/api_config.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/session_storage.dart';
 import '../data/auth_repository.dart';
+import '../data/google_identity_client.dart';
 import '../domain/auth_issue.dart';
 import '../domain/auth_models.dart';
 
@@ -41,11 +42,15 @@ final authControllerProvider = NotifierProvider<AuthController, AuthState>(
 
 class AuthController extends Notifier<AuthState> {
   late AuthRepository _repository;
+  int _epoch = 0;
   @override
   AuthState build() {
+    ++_epoch;
+    ref.onDispose(() => ++_epoch);
     _repository = ref.watch(authRepositoryProvider);
     final subscription = _repository.invalidations.listen((issue) {
       if (!ref.mounted) return;
+      ++_epoch;
       state = AuthState(
         issue == AuthIssue.storage
             ? AuthStatus.startupError
@@ -86,16 +91,31 @@ class AuthController extends Notifier<AuthState> {
   Future<bool> register(String name, String email, String password) =>
       _submit(() => _repository.register(name, email, password));
 
-  Future<bool> _submit(Future<AuthUser> Function() action) async {
+  Future<bool> google() {
+    final epoch = _epoch;
+    return _submit(() async {
+      final token =
+          await ref.read(googleIdentityClientProvider).selectIdToken();
+      if (!ref.mounted || epoch != _epoch || token == null) return null;
+      return _repository.google(token);
+    });
+  }
+
+  Future<bool> _submit(Future<AuthUser?> Function() action) async {
     if (state.busy || state.status != AuthStatus.unauthenticated) return false;
+    final epoch = _epoch;
     state = const AuthState(AuthStatus.unauthenticated, busy: true);
     try {
       final user = await action();
-      if (!ref.mounted) return false;
+      if (!ref.mounted || epoch != _epoch) return false;
+      if (user == null) {
+        state = const AuthState(AuthStatus.unauthenticated);
+        return false;
+      }
       state = AuthState(AuthStatus.authenticated, user: user);
       return true;
     } catch (error) {
-      if (!ref.mounted) return false;
+      if (!ref.mounted || epoch != _epoch) return false;
       final issue = mapAuthIssue(error);
       state = AuthState(
         issue == AuthIssue.storage

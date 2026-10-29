@@ -1,8 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using NetPusula.Api;
 
 namespace NetPusula.Tests;
 
@@ -11,14 +12,33 @@ public sealed class ReleaseHardeningTests
     [Theory]
     [InlineData("")]
     [InlineData("not a connection string")]
-    public void Production_rejects_missing_or_malformed_database_configuration(string connection)
+    public async Task Production_rejects_missing_or_malformed_database_configuration(string connection)
     {
-        using var factory = new AuthApiFactory();
-        using var production = factory.WithWebHostBuilder(b => b.UseEnvironment("Production")
-            .ConfigureAppConfiguration((_, c) => c.AddInMemoryCollection(
-                new Dictionary<string, string?> { ["ConnectionStrings:Database"] = connection })));
-        Assert.Throws<OptionsValidationException>(() => production.CreateClient());
+        // Own startup/disposal: the minimal API entry point's Run disposes a failed
+        // host before WebApplicationFactory can observe its startup exception.
+        using var host = CreateValidationHost("Production", connection);
+        var exception = await Assert.ThrowsAsync<OptionsValidationException>(() => host.StartAsync());
+        Assert.Equal(typeof(DatabaseConnectionOptions), exception.OptionsType);
     }
+
+    [Theory]
+    [InlineData("Production", "Host=localhost;Database=configuration_only")]
+    [InlineData("Development", "")]
+    public async Task Database_validation_allows_valid_production_or_development_configuration(
+        string environment, string connection)
+    {
+        using var host = CreateValidationHost(environment, connection);
+        await host.StartAsync();
+        await host.StopAsync();
+    }
+
+    private static IHost CreateValidationHost(string environment, string connection) =>
+        new HostBuilder().UseEnvironment(environment)
+            .ConfigureAppConfiguration((_, c) => c.AddInMemoryCollection(
+                new Dictionary<string, string?> { ["ConnectionStrings:Database"] = connection }))
+            .ConfigureServices((context, services) =>
+                services.AddDatabaseConnectionValidation(context.HostingEnvironment))
+            .Build();
 
     [Theory]
     [InlineData("/api/auth/register")]

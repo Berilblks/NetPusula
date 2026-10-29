@@ -2,7 +2,7 @@ import '../../core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../core/constants/app_brand.dart';
+import '../auth/presentation/premium_auth_page.dart';
 import '../../l10n/app_localizations.dart';
 import '../auth/application/auth_controller.dart';
 import '../auth/presentation/auth_text.dart';
@@ -31,30 +31,8 @@ class WelcomeScreen extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(AppSpace.lg),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.explore_outlined,
-                        size: 56,
-                        color: theme.colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                  ),
+                  const AuthBrandHeader(),
                   const SizedBox(height: AppSpace.xl),
-                  Text(
-                    AppBrand.name,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.headlineLarge?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpace.lg),
                   Text(
                     l10n.welcomeTagline,
                     textAlign: TextAlign.center,

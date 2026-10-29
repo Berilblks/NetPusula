@@ -17,6 +17,7 @@ dependencies:
   flutter_secure_storage: ^10.3.4
 
   intl: any
+  google_sign_in: 7.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -25,4 +26,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/auth/google-g.png
 

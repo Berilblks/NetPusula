@@ -9,8 +9,79 @@ namespace NetPusula.Infrastructure.Auth;
 
 public sealed class AuthService(NetPusulaDbContext db, IPasswordHasher<User> passwordHasher,
     PasswordTimingHash timingHash, IAccessTokenIssuer tokenIssuer, IOptions<AuthSessionOptions> options,
-    TimeProvider clock, ILogger<AuthService> logger) : IAuthService
+    TimeProvider clock, ILogger<AuthService> logger, IGoogleTokenValidator google) : IAuthService
 {
+    public async Task<GoogleLinkOutcome> LinkGoogleAsync(Guid userId, GoogleLinkRequest request, CancellationToken cancellationToken)
+    {
+        var user = await db.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Id == userId, cancellationToken);
+        if (user is null) return new(Error: "session_expired");
+        if (request.IdToken is null || request.IdToken.Length is < 1 or > 8192)
+            return new(Error: "google_rejected");
+        // Fresh proof of the local credential, not merely an old bearer session.
+        if (user.PasswordHash is not null && (request.CurrentPassword is null ||
+            request.CurrentPassword.Length is < 1 or > 128 ||
+            passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.CurrentPassword) == PasswordVerificationResult.Failed))
+            return new(Error: "reauth_required");
+        var verified = await google.ValidateAsync(request.IdToken, cancellationToken);
+        if (verified.Unavailable) return new(Error: "google_unavailable");
+        if (verified.Identity is not { } identity) return new(Error: "google_rejected");
+        if (user.GoogleSubject == identity.Subject) return new(await GetUserAsync(userId, cancellationToken));
+        if (user.GoogleSubject is not null || user.PasswordHash is null) return new(Error: "google_link_conflict");
+        if (await db.Users.AnyAsync(x => x.GoogleSubject == identity.Subject && x.Id != userId, cancellationToken))
+            return new(Error: "google_link_conflict");
+        try
+        {
+            // Atomic compare-and-set prevents concurrent requests replacing a linked subject.
+            // The unique index also arbitrates a subject claimed by two different users.
+            var changed = await db.Users.Where(x => x.Id == userId && x.GoogleSubject == null)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.GoogleSubject, identity.Subject), cancellationToken);
+            if (changed == 0 && !await db.Users.AnyAsync(x => x.Id == userId && x.GoogleSubject == identity.Subject, cancellationToken))
+                return new(Error: "google_link_conflict");
+        }
+        catch (Exception e) when (e is Npgsql.PostgresException { SqlState: "23505" })
+        {
+            return new(Error: "google_link_conflict");
+        }
+        return new(await GetUserAsync(userId, cancellationToken));
+    }
+
+    public async Task<AuthOutcome> GoogleAsync(GoogleLoginRequest request, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(request.IdToken) || request.IdToken.Length > 8192)
+            return new() { Failure = AuthFailure.GoogleRejected };
+        var verified = await google.ValidateAsync(request.IdToken, cancellationToken);
+        if (verified.Unavailable) return new() { Failure = AuthFailure.GoogleUnavailable };
+        if (verified.Identity is not { } identity) return new() { Failure = AuthFailure.GoogleRejected };
+        var user = await db.Users.SingleOrDefaultAsync(x => x.GoogleSubject == identity.Subject, cancellationToken);
+        if (user is null)
+        {
+            var normalized = User.NormalizeEmail(identity.Email);
+            if (await db.Users.AnyAsync(x => x.NormalizedEmail == normalized, cancellationToken))
+                return new() { Failure = AuthFailure.GoogleConflict };
+            user = new User(identity.Email, identity.DisplayName);
+            user.SetGoogleSubject(identity.Subject);
+            db.Users.Add(user);
+        }
+        var response = CreateSession(user);
+        try { await db.SaveChangesAsync(cancellationToken); }
+        catch (DbUpdateException)
+        {
+            // Same-sub or same-email concurrent signup: never attach based on email.
+            db.ChangeTracker.Clear();
+            user = await db.Users.SingleOrDefaultAsync(x => x.GoogleSubject == identity.Subject, cancellationToken);
+            if (user is not null)
+            {
+                response = CreateSession(user);
+                await db.SaveChangesAsync(cancellationToken);
+            }
+            else if (await db.Users.AnyAsync(x => x.NormalizedEmail == User.NormalizeEmail(identity.Email), cancellationToken))
+                return new() { Failure = AuthFailure.GoogleConflict };
+            else throw;
+        }
+        logger.LogInformation("Google authentication succeeded for user {UserId}.", user.Id);
+        return new() { Response = response };
+    }
+
     public async Task<AuthOutcome> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken)
     {
         var errors = AuthValidation.Registration(request);
@@ -122,7 +193,7 @@ public sealed class AuthService(NetPusulaDbContext db, IPasswordHasher<User> pas
 
     public Task<UserProfile?> GetUserAsync(Guid userId, CancellationToken cancellationToken) =>
         db.Users.AsNoTracking().Where(x => x.Id == userId)
-            .Select(x => new UserProfile(x.Id, x.DisplayName, x.Email)).SingleOrDefaultAsync(cancellationToken);
+            .Select(x => new UserProfile(x.Id, x.DisplayName, x.Email, x.GoogleSubject != null)).SingleOrDefaultAsync(cancellationToken);
 
     private AuthResponse CreateSession(User user)
     {
@@ -142,7 +213,7 @@ public sealed class AuthService(NetPusulaDbContext db, IPasswordHasher<User> pas
             AccessTokenExpiresAtUtc = access.ExpiresAtUtc,
             RefreshToken = raw,
             RefreshTokenExpiresAtUtc = expires,
-            User = new UserProfile(user.Id, user.DisplayName, user.Email)
+            User = new UserProfile(user.Id, user.DisplayName, user.Email, user.GoogleSubject != null)
         };
     }
 

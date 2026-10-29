@@ -56,7 +56,8 @@ public sealed class AuthTests
         var me = await client.GetAsync("/api/auth/me");
         Assert.Equal(HttpStatusCode.OK, me.StatusCode);
         using var json = JsonDocument.Parse(await me.Content.ReadAsStringAsync());
-        Assert.Equal(new[] { "displayName", "email", "id" }, json.RootElement.EnumerateObject().Select(x => x.Name).Order().ToArray());
+        Assert.Equal(new[] { "displayName", "email", "googleLinked", "id" }, json.RootElement.EnumerateObject().Select(x => x.Name).Order().ToArray());
+        Assert.False(json.RootElement.GetProperty("googleLinked").GetBoolean());
         Assert.Equal(user.Id, json.RootElement.GetProperty("id").GetGuid());
 
         using var anonymous = factory.CreateClient();

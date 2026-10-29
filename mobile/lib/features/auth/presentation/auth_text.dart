@@ -15,6 +15,9 @@ String authIssueText(AppLocalizations l10n, AuthIssue issue) => switch (issue) {
   AuthIssue.storage => l10n.storageError,
   AuthIssue.configuration => l10n.configurationError,
   AuthIssue.localLogout => l10n.localLogout,
+  AuthIssue.googleRejected => l10n.googleRejected,
+  AuthIssue.googleConflict => l10n.googleConflict,
+  AuthIssue.googleUnavailable => l10n.googleUnavailable,
 };
 
 class AuthValidation {

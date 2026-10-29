@@ -14,6 +14,9 @@ enum AuthIssue {
   storage,
   configuration,
   localLogout,
+  googleRejected,
+  googleConflict,
+  googleUnavailable,
 }
 
 class AuthException implements Exception {
@@ -27,6 +30,11 @@ AuthIssue mapAuthIssue(Object error) {
   if (error is AuthException) return error.issue;
   if (error is! DioException) return AuthIssue.unexpected;
   if (error.error is AuthException) return (error.error as AuthException).issue;
+  final data = error.response?.data;
+  final code = data is Map ? data['code'] : null;
+  if (code == 'google_rejected') return AuthIssue.googleRejected;
+  if (code == 'google_conflict') return AuthIssue.googleConflict;
+  if (code == 'google_unavailable') return AuthIssue.googleUnavailable;
   if ({
     DioExceptionType.connectionError,
     DioExceptionType.connectionTimeout,

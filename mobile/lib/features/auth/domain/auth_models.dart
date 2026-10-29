@@ -3,14 +3,17 @@ class AuthUser {
     required this.id,
     required this.displayName,
     required this.email,
+    this.googleLinked = false,
   });
   final String id;
   final String displayName;
   final String email;
+  final bool googleLinked;
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
     id: requiredString(json, 'id'),
     displayName: requiredString(json, 'displayName'),
     email: requiredString(json, 'email'),
+    googleLinked: json['googleLinked'] == true,
   );
 }
 

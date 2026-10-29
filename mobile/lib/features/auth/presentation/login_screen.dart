@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../application/auth_controller.dart';
 import 'auth_text.dart';
 import 'auth_widgets.dart';
+import 'premium_auth_page.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -40,9 +41,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(authControllerProvider);
-    return AuthPage(
+    return PremiumAuthPage(
       title: l10n.loginTitle,
-      subtitle: l10n.loginSubtitle,
       child: AutofillGroup(
         child: Form(
           key: form,
@@ -57,7 +57,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 textInputAction: TextInputAction.next,
                 autofillHints: const [AutofillHints.email],
                 autocorrect: false,
-                decoration: InputDecoration(labelText: l10n.emailLabel),
+                decoration: InputDecoration(
+                  labelText: l10n.emailLabel,
+                  prefixIcon: const Icon(Icons.mail_outline),
+                ),
                 validator:
                     (value) =>
                         AuthValidation.email(value ?? '')
@@ -83,12 +86,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               if (state.issue != null)
                 AuthNotice(authIssueText(l10n, state.issue!)),
               const SizedBox(height: AppSpace.xl),
-              AuthSubmit(
+              PremiumAuthSubmit(
                 key: const Key('login.submit'),
                 label: l10n.loginAction,
                 busy: state.busy,
                 onPressed: submit,
               ),
+              const GoogleAuthButton(),
               const SizedBox(height: AppSpace.lg),
               TextButton(
                 onPressed:

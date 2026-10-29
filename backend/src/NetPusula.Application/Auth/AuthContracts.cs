@@ -18,7 +18,7 @@ public sealed class RefreshRequest
     public string? RefreshToken { get; init; }
 }
 
-public sealed record UserProfile(Guid Id, string DisplayName, string Email);
+public sealed record UserProfile(Guid Id, string DisplayName, string Email, bool GoogleLinked = false);
 public sealed record AccessToken(string Value, DateTime ExpiresAtUtc);
 
 public sealed class AuthResponse
@@ -31,7 +31,7 @@ public sealed class AuthResponse
     public string TokenType => "Bearer";
 }
 
-public enum AuthFailure { None, InvalidInput, InvalidCredentials, DuplicateEmail }
+public enum AuthFailure { None, InvalidInput, InvalidCredentials, DuplicateEmail, GoogleRejected, GoogleConflict, GoogleUnavailable }
 
 public sealed class AuthOutcome
 {
@@ -42,6 +42,8 @@ public sealed class AuthOutcome
 
 public interface IAuthService
 {
+    Task<GoogleLinkOutcome> LinkGoogleAsync(Guid userId, GoogleLinkRequest request, CancellationToken cancellationToken);
+    Task<AuthOutcome> GoogleAsync(GoogleLoginRequest request, CancellationToken cancellationToken);
     Task<AuthOutcome> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken);
     Task<AuthOutcome> LoginAsync(LoginRequest request, CancellationToken cancellationToken);
     Task<AuthOutcome> RefreshAsync(string? token, CancellationToken cancellationToken);

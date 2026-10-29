@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../application/auth_controller.dart';
 import 'auth_text.dart';
 import 'auth_widgets.dart';
+import 'premium_auth_page.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -47,9 +48,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(authControllerProvider);
-    return AuthPage(
+    return PremiumAuthPage(
       title: l10n.registerTitle,
-      subtitle: l10n.registerSubtitle,
       child: AutofillGroup(
         child: Form(
           key: form,
@@ -63,7 +63,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 textCapitalization: TextCapitalization.words,
                 textInputAction: TextInputAction.next,
                 autofillHints: const [AutofillHints.name],
-                decoration: InputDecoration(labelText: l10n.nameLabel),
+                decoration: InputDecoration(
+                  labelText: l10n.nameLabel,
+                  prefixIcon: const Icon(Icons.person_outline),
+                ),
                 validator:
                     (value) =>
                         AuthValidation.name(value ?? '')
@@ -79,7 +82,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 textInputAction: TextInputAction.next,
                 autofillHints: const [AutofillHints.email],
                 autocorrect: false,
-                decoration: InputDecoration(labelText: l10n.emailLabel),
+                decoration: InputDecoration(
+                  labelText: l10n.emailLabel,
+                  prefixIcon: const Icon(Icons.mail_outline),
+                ),
                 validator:
                     (value) =>
                         AuthValidation.email(value ?? '')
@@ -125,12 +131,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               if (state.issue != null)
                 AuthNotice(authIssueText(l10n, state.issue!)),
               const SizedBox(height: AppSpace.xl),
-              AuthSubmit(
+              PremiumAuthSubmit(
                 key: const Key('register.submit'),
-                label: l10n.registerAction,
+                label: l10n.registerSubmit,
                 busy: state.busy,
                 onPressed: submit,
               ),
+              const GoogleAuthButton(),
               const SizedBox(height: AppSpace.lg),
               TextButton(
                 onPressed:
