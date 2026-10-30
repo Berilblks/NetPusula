@@ -79,7 +79,7 @@ abstract final class AppTheme {
         centerTitle: false,
         titleTextStyle: text.titleLarge,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         margin: const EdgeInsets.symmetric(vertical: AppSpace.sm),
         color: colors.surfaceContainerLowest,

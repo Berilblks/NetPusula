@@ -327,34 +327,37 @@ class _GoalScreenState extends ConsumerState<GoalScreen> {
                       ),
                     ],
                   )
-                  : Column(
-                    children:
-                        exams
-                            .map(
-                              (exam) => Card(
-                                color:
-                                    selected?.id == exam.id
-                                        ? Theme.of(
-                                          context,
-                                        ).colorScheme.primaryContainer
-                                        : null,
-                                child: RadioListTile<String>(
-                                  key: Key('exam.${exam.id}'),
-                                  value: exam.id,
-                                  groupValue: selected?.id,
-                                  title: Text(exam.code),
-                                  subtitle: Text(exam.name),
-                                  onChanged:
-                                      (_) => setState(() {
-                                        if (selected?.id != exam.id) {
-                                          target.clear();
-                                        }
-                                        selected = exam;
-                                      }),
+                  : RadioGroup<String>(
+                    groupValue: selected?.id,
+                    onChanged: (id) {
+                      if (id == null) return;
+                      final exam = exams.firstWhere((exam) => exam.id == id);
+                      setState(() {
+                        if (selected?.id != id) target.clear();
+                        selected = exam;
+                      });
+                    },
+                    child: Column(
+                      children:
+                          exams
+                              .map(
+                                (exam) => Card(
+                                  color:
+                                      selected?.id == exam.id
+                                          ? Theme.of(
+                                            context,
+                                          ).colorScheme.primaryContainer
+                                          : null,
+                                  child: RadioListTile<String>(
+                                    key: Key('exam.${exam.id}'),
+                                    value: exam.id,
+                                    title: Text(exam.code),
+                                    subtitle: Text(exam.name),
+                                  ),
                                 ),
-                              ),
-                            )
-                            .toList(),
+                              )
+                              .toList(),
+                    ),
                   ),
     );
   }

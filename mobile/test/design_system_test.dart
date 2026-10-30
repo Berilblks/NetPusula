@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show CheckedState, Tristate;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -145,7 +146,7 @@ void main() {
     await tapVisible(t, find.byKey(const Key('exam.exam-id')));
 
     bool checked(SemanticsNode node) {
-      if (node.hasFlag(SemanticsFlag.isChecked)) return true;
+      if (node.flagsCollection.isChecked == CheckedState.isTrue) return true;
       var found = false;
       node.visitChildren((child) {
         found = checked(child) || found;
@@ -169,16 +170,18 @@ void main() {
       expect(
         t
             .getSemantics(find.byKey(const Key('statistics.range.20')))
-            .hasFlag(SemanticsFlag.isSelected),
-        isTrue,
+            .flagsCollection
+            .isSelected,
+        Tristate.isTrue,
       );
       await t.ensureVisible(find.byKey(const Key('statistics.section.s1')));
       await t.pump();
       expect(
         t
             .getSemantics(find.byKey(const Key('statistics.section.s1')))
-            .hasFlag(SemanticsFlag.isSelected),
-        isTrue,
+            .flagsCollection
+            .isSelected,
+        Tristate.isTrue,
       );
       semantics.dispose();
     },
