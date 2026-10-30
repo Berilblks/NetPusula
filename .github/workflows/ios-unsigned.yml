@@ -1,0 +1,99 @@
+name: iOS unsigned readiness
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-unsigned-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    runs-on: macos-26
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: mobile
+        shell: bash
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+      COCOAPODS_DISABLE_STATS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check Xcode version
+        run: |
+          xcodebuild -version
+          test "$(xcodebuild -version | head -n 1)" = 'Xcode 26.3'
+          xcodebuild -showsdks
+      - name: Install pinned Flutter
+        run: |
+          git clone --depth 1 --branch 3.38.0 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - name: Prepare Flutter
+        run: |
+          flutter --version
+          flutter config --no-enable-swift-package-manager
+          flutter precache --ios
+          flutter pub get
+          flutter gen-l10n
+      - name: Analyze and test
+        run: |
+          flutter analyze
+          flutter test --concurrency=1
+      - name: Install pinned CocoaPods
+        run: |
+          gem install cocoapods -v 1.16.2 --no-document --user-install
+          # Flutter also invokes `pod`; force the same version even if the image
+          # has a newer CocoaPods installed globally.
+          mkdir -p "$RUNNER_TEMP/pinned-pod"
+          cat > "$RUNNER_TEMP/pinned-pod/pod" <<'RUBY'
+          #!/usr/bin/env ruby
+          gem 'cocoapods', '= 1.16.2'
+          load Gem.bin_path('cocoapods', 'pod', '1.16.2')
+          RUBY
+          chmod +x "$RUNNER_TEMP/pinned-pod/pod"
+          echo "$RUNNER_TEMP/pinned-pod" >> "$GITHUB_PATH"
+      - name: Resolve native dependencies
+        working-directory: mobile/ios
+        run: |
+          pod --version
+          ruby -c Podfile
+          plutil -lint Runner/Info.plist Flutter/AppFrameworkInfo.plist Runner.xcodeproj/project.pbxproj
+          if [ -f Podfile.lock ]; then
+            pod install --deployment
+          else
+            echo '::warning::Bootstrap resolution: review and retain Podfile.lock before claiming locked native reproducibility.'
+            pod install
+          fi
+      - name: Check all native configurations
+        working-directory: mobile/ios
+        run: |
+          for config in Debug Profile Release; do
+            xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration "$config" -showBuildSettings CODE_SIGNING_ALLOWED=NO > "$RUNNER_TEMP/settings-$config.txt"
+            grep 'IPHONEOS_DEPLOYMENT_TARGET = 13.0' "$RUNNER_TEMP/settings-$config.txt"
+          done
+      - name: Build unsigned device app
+        run: flutter build ios --release --no-codesign --dart-define=API_BASE_URL=https://example.invalid
+      - name: Preserve dependency resolution for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-dependency-resolution
+          path: |
+            mobile/ios/Podfile.lock
+            mobile/pubspec.lock
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Package unsigned app
+        run: ditto -c -k --sequesterRsrc --keepParent build/ios/iphoneos/Runner.app build/ios/unsigned-Runner.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-unsigned-app
+          path: mobile/build/ios/unsigned-Runner.zip
+          retention-days: 7
+          if-no-files-found: error

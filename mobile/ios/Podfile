@@ -1,0 +1,37 @@
+platform :ios, '13.0'
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', 'Debug' => :debug, 'Profile' => :release, 'Release' => :release
+
+def flutter_root
+  config = File.expand_path('Flutter/Generated.xcconfig', __dir__)
+  raise 'Run flutter pub get before pod install' unless File.exist?(config)
+  File.foreach(config) do |line|
+    return line.split('=', 2).last.strip if line.start_with?('FLUTTER_ROOT=')
+  end
+  raise 'FLUTTER_ROOT missing from Generated.xcconfig'
+end
+
+require File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper')
+flutter_ios_podfile_setup
+
+target 'Runner' do
+  use_frameworks!
+  flutter_install_all_ios_pods(__dir__)
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      # Raise older plugin targets without lowering a dependency's newer minimum.
+      current = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
+      if current.nil? || Gem::Version.new(current) < Gem::Version.new('13.0')
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      end
+    end
+  end
+end
